@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.markusbilz.yown.AddActivity">
+
+    <com.lucasurbas.listitemview.ListItemView
+        android:id="@+id/lv_edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liv_displayMode="icon"
+        app:liv_icon="@drawable/ic_title_black_24dp"
+        app:liv_title="@string/title_lv_edit_title" />
+
+    <com.lucasurbas.listitemview.ListItemView
+        android:id="@+id/lv_edit_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liv_displayMode="icon"
+        app:liv_icon="@drawable/ic_image_black_24dp"
+        app:liv_subtitle="Choose from gallery"
+        app:liv_title="@string/title_lv_edit_image" />
+
+    <com.lucasurbas.listitemview.ListItemView
+        android:id="@+id/lv_edit_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liv_displayMode="icon"
+        app:liv_icon="@drawable/ic_assignment_black_24dp"
+        app:liv_title="@string/title_lv_edit_category" />
+
+    <com.lucasurbas.listitemview.ListItemView
+        android:id="@+id/lv_edit_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liv_displayMode="icon"
+        app:liv_icon="@drawable/ic_subject_black_24dp"
+        app:liv_title="@string/title_lv_edit_note" />
+</LinearLayout>

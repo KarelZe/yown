@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/list"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        android:title="list" />
+    <item
+        android:id="@+id/dispose"
+        android:icon="@drawable/ic_lightbulb_outline_black_24dp"
+        android:title="dispose" />
+</menu>
