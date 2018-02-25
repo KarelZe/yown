@@ -7,8 +7,8 @@ This app is my coursework for ```CMP 309``` at Abertay University, Scotland.
 ## Todos
 - [x] Create UI
 - [ ] Add intents to camera / gallery incl. permissions
-- [ ] Add call for result between activities
-- [ ] Add a database functionality
+- [x] Add call for result between activities
+- [x] Add a database functionality
 - [ ] Add NFC functionality
 - [ ] Code review
 ## Contact

@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +21,11 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
 
-
         bottomNavigationView = findViewById(R.id.bnv_navigator);
         bottomNavigationView.setSelectedItemId(R.id.list);
 
         // set default tab
-        MenuItem selectedItem =  bottomNavigationView.getMenu().getItem(0);
+        MenuItem selectedItem = bottomNavigationView.getMenu().getItem(0);
         selectFragment(selectedItem);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -43,33 +42,37 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main_options,menu);
+        inflater.inflate(R.menu.menu_main_options, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.itemSettings:
-                Intent settingsIntent = new Intent(this,SettingsActivity.class);
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
         }
         return true;
     }
 
-    private void selectFragment(MenuItem item){
+    private void selectFragment(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.list:
-                fragmentTransaction.replace(R.id.fl_content,new ListFragment()).commit();
+                fragmentTransaction.replace(R.id.fl_content, new ListFragment()).commit();
                 break;
             case R.id.dispose:
-                fragmentTransaction.replace(R.id.fl_content,new DisposeFragment()).commit();
+                fragmentTransaction.replace(R.id.fl_content, new DisposeFragment()).commit();
                 break;
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 }

@@ -1,64 +1,104 @@
 package com.markusbilz.yown;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
 class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.ItemViewHolder> {
 
+    private static ItemWithButtonAdapter mySingelton;
     private ArrayList<Item> items;
-    @SuppressWarnings("unused")
-    private Context context;
-    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView itemTitle;
-        TextView itemDescription;
-
-        ItemViewHolder(View itemView) {
-            super(itemView);
-            itemTitle = itemView.findViewById(R.id.tv_item_dispose_title);
-            itemDescription = itemView.findViewById(R.id.tv_item_dispose_description);
-
-            itemView.setOnClickListener(this);
-        }
+    private Activity activity;
 
 
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(),itemTitle.getText(), Toast.LENGTH_SHORT).show();
-        }
+    private ItemWithButtonAdapter(Activity activity) {
+        this.activity = activity;
+        items = new ArrayList<>();
+        reload();
     }
 
-    ItemWithButtonAdapter(ArrayList<Item> items) {
-        this.items = items;
+    static ItemWithButtonAdapter getSingelton(Activity activity) {
+        if (mySingelton == null)
+            mySingelton = new ItemWithButtonAdapter(activity);
+        return mySingelton;
+    }
+
+    void reload() {
+        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
+        items = (ArrayList<Item>) itemDB.getAll();
+    }
+
+    void reloadFiltered(boolean isNeeded) {
+        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
+        items = (ArrayList<Item>) itemDB.getAllFiltered(isNeeded);
+    }
+
+    Item getItem(int id) {
+        for (Item item : items) {
+            if (item.getId() == id)
+                return item;
+        }
+        return null;
     }
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if(context == null)
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_item_dispose, parent,false);
-        else
-            view = LayoutInflater.from(context).inflate(R.layout.cardview_item_dispose, parent,false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_item_dispose, parent, false);
         return new ItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = items.get(position);
-        holder.itemTitle.setText(item.getTitle());
-        holder.itemDescription.setText(item.getDescription());
-
+        holder.setCurrentItem(item);
     }
 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Item currentItem;
+        TextView itemTitle;
+        TextView itemDescription;
+        Button itemSell;
+        ItemViewHolder(View itemView) {
+            super(itemView);
+            itemTitle = itemView.findViewById(R.id.tv_item_dispose_title);
+            itemDescription = itemView.findViewById(R.id.tv_item_dispose_description);
+            itemSell = itemView.findViewById(R.id.btn_item_dispose_sell);
+            itemSell.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setCurrentItem(Item currentItem) {
+            this.currentItem = currentItem;
+            itemTitle.setText(currentItem.getTitle());
+            itemDescription.setText(currentItem.getDescription());
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(view.getId()==R.id.btn_item_dispose_sell){
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ebay.com"));
+                view.getContext().startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(view.getContext(), EditActivity.class);
+                intent.putExtra("id", currentItem.getId());
+                view.getContext().startActivity(intent);
+            }
+        }
     }
 }

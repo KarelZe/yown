@@ -1,6 +1,6 @@
 package com.markusbilz.yown;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,10 +13,60 @@ import java.util.ArrayList;
 
 class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
+    private static ItemAdapter mySingelton;
     private ArrayList<Item> items;
-    @SuppressWarnings("unused")
-    private Context context;
-    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private Activity activity;
+
+
+    private ItemAdapter(Activity activity) {
+        this.activity = activity;
+        items = new ArrayList<>();
+        reload();
+    }
+
+    static ItemAdapter getSingelton(Activity activity) {
+        if (mySingelton == null)
+            mySingelton = new ItemAdapter(activity);
+        return mySingelton;
+    }
+
+    void reload() {
+        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
+        items = (ArrayList<Item>) itemDB.getAll();
+    }
+
+    void reloadFiltered(boolean isNeeded) {
+        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
+        items = (ArrayList<Item>) itemDB.getAllFiltered(isNeeded);
+    }
+    Item getItem(int id) {
+        for (Item item : items) {
+            if (item.getId() == id)
+                return item;
+        }
+        return null;
+    }
+
+    @Override
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_item_default, parent, false);
+        return new ItemViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
+        Item item = items.get(position);
+        holder.setCurrentItem(item);
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        Item currentItem;
         TextView itemTitle;
         TextView itemDescription;
 
@@ -27,38 +77,17 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
             itemView.setOnClickListener(this);
         }
 
+        public void setCurrentItem(Item currentItem) {
+            this.currentItem = currentItem;
+            itemTitle.setText(currentItem.getTitle());
+            itemDescription.setText(currentItem.getDescription());
+        }
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), EditActivity.class);
-            view.getContext().startActivity(intent);
+                Intent intent = new Intent(view.getContext(), EditActivity.class);
+                intent.putExtra("id", currentItem.getId());
+                view.getContext().startActivity(intent);
         }
-    }
-
-    ItemAdapter(ArrayList<Item> items) {
-        this.items = items;
-    }
-
-    @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        if(context == null)
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_item_default, parent,false);
-        else
-            view = LayoutInflater.from(context).inflate(R.layout.cardview_item_default, parent,false);
-        return new ItemViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Item item = items.get(position);
-        holder.itemTitle.setText(item.getTitle());
-        holder.itemDescription.setText(item.getDescription());
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
     }
 }

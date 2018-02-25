@@ -2,6 +2,10 @@
   <dictionary name="mail">
     <words>
       <w>addtitlerequest</w>
+      <w>colname</w>
+      <w>markusbilz</w>
+      <w>singelton</w>
+      <w>yown</w>
     </words>
   </dictionary>
 </component>

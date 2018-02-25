@@ -15,7 +15,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position == 0) {
             return new KeepListFragment();
-        } else{
+        } else {
             return new DisposeListFragment();
         }
 

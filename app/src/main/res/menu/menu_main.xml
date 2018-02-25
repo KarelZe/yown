@@ -3,9 +3,9 @@
     <item
         android:id="@+id/list"
         android:icon="@drawable/ic_assignment_black_24dp"
-        android:title="list" />
+        android:title="@string/menu_item_list" />
     <item
         android:id="@+id/dispose"
-        android:icon="@drawable/ic_lightbulb_outline_black_24dp"
-        android:title="dispose" />
+        android:icon="@drawable/ic_light_bulb_outline_black_24dp"
+        android:title="@string/menu_item_dispose" />
 </menu>

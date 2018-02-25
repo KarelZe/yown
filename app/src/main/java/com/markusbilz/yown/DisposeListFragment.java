@@ -8,18 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 public class DisposeListFragment extends Fragment {
 
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
-    ArrayList<Item> items;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
 
-    public DisposeListFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,20 +23,22 @@ public class DisposeListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dispose_list, container, false);
 
-
         recyclerView = view.findViewById(R.id.rv_dispose);
         layoutManager = new LinearLayoutManager(getActivity());
-        loadItems();
-        adapter = new ItemWithButtonAdapter(items);
+
+        adapter = ItemWithButtonAdapter.getSingelton(getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;
     }
 
-    private void loadItems(){
-        items = new ArrayList<>();
-        items.add(new Item("Mac Book II", "This is my 2. laptop."));
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        ItemWithButtonAdapter adapter = ItemWithButtonAdapter.getSingelton(getActivity());
+        adapter.reloadFiltered(false);
+        recyclerView.setAdapter(adapter);
     }
+
 }

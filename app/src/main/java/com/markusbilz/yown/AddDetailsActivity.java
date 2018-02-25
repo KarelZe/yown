@@ -1,24 +1,34 @@
 package com.markusbilz.yown;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
-public class AddDetailsActivity extends AppCompatActivity {
 
-    EditText addDetailsEditText;
-    public static final int RESULT_SUCCESS = 1;
+public class AddDetailsActivity extends AppCompatActivity implements View.OnKeyListener {
+
+    private EditText etAddDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        addDetailsEditText = findViewById(R.id.et_add_details);
         setContentView(R.layout.activity_add_details);
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.title_set_details);
+
+        etAddDetails = findViewById(R.id.et_add_details);
+
+        // try setting hint from intent
+        Intent intent = getIntent();
+        String title = intent.getStringExtra("title");
+
+        etAddDetails.setOnKeyListener(this);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -33,5 +43,18 @@ public class AddDetailsActivity extends AppCompatActivity {
             finish(); // close this activity and return to preview activity
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("data", etAddDetails.getText().toString());
+            setResult(EditActivity.RESULT_OK, resultIntent);
+            finish();
+            return true;
+        }
+        return false;
     }
 }

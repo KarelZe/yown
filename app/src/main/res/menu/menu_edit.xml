@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_menu_delete"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/menu_item_delete"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_menu_done"
         android:icon="@drawable/ic_done_white_24dp"
         android:orderInCategory="100"
