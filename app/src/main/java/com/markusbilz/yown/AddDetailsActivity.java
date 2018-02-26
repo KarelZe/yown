@@ -21,10 +21,17 @@ public class AddDetailsActivity extends AppCompatActivity implements View.OnKeyL
 
         etAddDetails = findViewById(R.id.et_add_details);
 
-        // try setting hint from intent
+        // try setting hint and former text from intent
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
+        if(title == null)
+            title = "Set details";
 
+        String text = intent.getStringExtra("text");
+        if(text == null)
+            text = "";
+
+        etAddDetails.append(text);
         etAddDetails.setOnKeyListener(this);
 
         if (getSupportActionBar() != null) {

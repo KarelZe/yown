@@ -56,21 +56,31 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), AddDetailsActivity.class);
+        // pass text to details activity if altered before
+        ListItemView tmp = (ListItemView) view;
+        String text = tmp.getTitle();
+        if(text != null && text.startsWith("Add "))
+            text = "";
+
         switch (view.getId()) {
             case R.id.lv_edit_title:
                 intent.putExtra("title", "Set title...");
+                intent.putExtra("text",text);
                 startActivityForResult(intent, REQUEST_SET_TITLE);
                 break;
             case R.id.lv_edit_category:
                 intent.putExtra("title", "Set category...");
+                intent.putExtra("text",text);
                 startActivityForResult(intent, REQUEST_SET_CATEGORY);
                 break;
             case R.id.lv_edit_image:
                 intent.putExtra("title", "Set image...");
+                intent.putExtra("text",text);
                 startActivityForResult(intent, REQUEST_SET_IMAGE);
                 break;
             case R.id.lv_edit_note:
                 intent.putExtra("title", "Set notes...");
+                intent.putExtra("text",text);
                 startActivityForResult(intent, REQUEST_SET_DESCRIPTION);
                 break;
         }

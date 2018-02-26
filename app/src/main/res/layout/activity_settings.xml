@@ -8,6 +8,7 @@
     tools:context="com.markusbilz.yown.AddActivity">
 
     <android.support.v7.widget.SwitchCompat
+        android:id="@+id/sc_advanced_sorting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_sorting" />
