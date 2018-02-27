@@ -18,9 +18,8 @@
         android:id="@+id/lv_edit_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:liv_displayMode="icon"
-        app:liv_icon="@drawable/ic_image_black_24dp"
-        app:liv_subtitle="Choose from gallery"
+        app:liv_displayMode="avatar"
+        app:liv_subtitle="@string/subtitle_lv_add_image"
         app:liv_title="@string/title_lv_edit_image" />
 
     <com.lucasurbas.listitemview.ListItemView

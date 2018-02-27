@@ -37,7 +37,7 @@ public class DisposeListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ItemWithButtonAdapter adapter = ItemWithButtonAdapter.getSingelton(getActivity());
-        adapter.reloadFiltered(false);
+        adapter.reloadFiltered(0);
         recyclerView.setAdapter(adapter);
     }
 

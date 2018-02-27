@@ -1,7 +1,9 @@
 package com.markusbilz.yown;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,12 +17,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private static final int REQUEST_SET_DESCRIPTION = 11;
     private static final int REQUEST_SET_IMAGE = 12;
     private static final int REQUEST_SET_CATEGORY = 13;
-    private static final int RESULT_OK = 200;
+    private static final int RESULT_OK = -1;
     private ListItemView addTitle;
     private ListItemView addImage;
     private ListItemView addNote;
     private ListItemView addCategory;
-
+    private Bitmap thumbnail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), AddDetailsActivity.class);
-
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         switch (view.getId()) {
             case R.id.lv_add_title:
                 intent.putExtra("title", "Set title...");
@@ -57,8 +59,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 startActivityForResult(intent, REQUEST_SET_CATEGORY);
                 break;
             case R.id.lv_add_image:
-                intent.putExtra("title", "Set image...");
-                startActivityForResult(intent, REQUEST_SET_IMAGE);
+                if(cameraIntent.resolveActivity(getPackageManager())!= null){
+                    startActivityForResult(cameraIntent, REQUEST_SET_IMAGE);
+                }
                 break;
             case R.id.lv_add_note:
                 intent.putExtra("title", "Set notes...");
@@ -70,7 +73,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private void saveItem(View view) {
         String title = addTitle.getTitle();
         String description = addNote.getTitle();
-        ItemDB.getInstance(view.getContext()).insert(title, description);
+        String category = addCategory.getTitle();
+        ItemDB.getInstance(view.getContext()).insert(title, description, category,BitmapUitility.bitmap2Byte(thumbnail));
         // close activity and return result to parent activity
         Intent resultIntent = new Intent();
         setResult(ListFragment.RESULT_OK, resultIntent);
@@ -85,7 +89,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     addTitle.setTitle(content);
                     break;
                 case REQUEST_SET_IMAGE:
-                    addImage.setTitle(content);
+                    Bundle extras = data.getExtras();
+                    thumbnail = (Bitmap) extras.get("data");
+                    addImage.getAvatarView().setImageBitmap(thumbnail);
                     break;
                 case REQUEST_SET_DESCRIPTION:
                     addNote.setTitle(content);

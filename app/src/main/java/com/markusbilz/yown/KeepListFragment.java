@@ -35,7 +35,7 @@ public class KeepListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ItemAdapter adapter = ItemAdapter.getSingelton(getActivity());
-        adapter.reloadFiltered(true);
+        adapter.reloadFiltered(1);
         recyclerView.setAdapter(adapter);
     }
 }

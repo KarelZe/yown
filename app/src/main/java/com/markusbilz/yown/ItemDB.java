@@ -7,18 +7,26 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemDB {
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ItemEntry.TABLE_NAME + " (" +
                     ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    ItemEntry.COLNAME_THUMBNAIL + " BLOB, "+
                     ItemEntry.COLNAME_TITLE + " TEXT, " +
                     ItemEntry.COLNAME_DESCRIPTION + " TEXT," +
-                    ItemEntry.COLNAME_IS_NEEDED + " INTEGER " +
+                    ItemEntry.COLNAME_IS_NEEDED + " INTEGER, " +
+                    ItemEntry.COLNAME_DATE_OF_CREATION + " TEXT," +
+                    ItemEntry.COLNAME_DATE_OF_LAST_USAGE + " TEXT," +
+                    ItemEntry.COLNAME_CATEGORY + " TEXT " +
                     ")";
+
     private static ItemDB myInstance;
     private Context context;
 
@@ -33,18 +41,18 @@ public class ItemDB {
         return myInstance;
     }
 
-    public List<Item> getAll() {
+    public List<Item> getAll(){
 
         ItemDbHelper helper = new ItemDbHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
         try {
             ArrayList<Item> result = new ArrayList<>();
             Cursor cursor = db.query(ItemEntry.TABLE_NAME,
-                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION,ItemEntry.COLNAME_IS_NEEDED},
+                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION,ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED,ItemEntry.COLNAME_DATE_OF_CREATION,ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
                     null, null, null, null, null);
             try {
                 while (cursor.moveToNext()) {
-                    Item item = new Item(cursor.getInt(0), cursor.getString(1), cursor.getString(2),cursor.getInt(3));
+                    Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7));
                     result.add(item);
                 }
                 return result;
@@ -56,21 +64,22 @@ public class ItemDB {
         }
     }
 
-    public List<Item> getAllFiltered(boolean isNeeded) {
+    public List<Item> getAllFiltered(int filterClause)
+
+    {
 
         ItemDbHelper helper = new ItemDbHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
         try {
             ArrayList<Item> result = new ArrayList<>();
             String selectionClause = ItemEntry.COLNAME_IS_NEEDED + " = ?";
-            int filterClause = isNeeded ? 1 : 0;
             String[] selectionArgs = {String.valueOf(filterClause)};
             Cursor cursor = db.query(ItemEntry.TABLE_NAME,
-                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION,ItemEntry.COLNAME_IS_NEEDED},
+                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION,ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED,ItemEntry.COLNAME_DATE_OF_CREATION,ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
                     selectionClause, selectionArgs, null, null, null);
             try {
                 while (cursor.moveToNext()) {
-                    Item item = new Item(cursor.getInt(0), cursor.getString(1), cursor.getString(2),cursor.getInt(3));
+                    Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(4), cursor.getString(5), cursor.getString(6));
                     result.add(item);
                 }
                 return result;
@@ -82,16 +91,23 @@ public class ItemDB {
         }
     }
 
-    public void insert(String title, String description) {
+    public void insert(String title, String description, String category,byte[]thumbnail) {
         ItemDbHelper helper = new ItemDbHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
         try {
+            // generate date in ISO 8601 format, as per sqlite spec
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.UK);
+            String date = sdf.format(new Date());
+            int isNeeded = (int) (Math.random()+0.5);
+
             ContentValues values = new ContentValues();
+            values.put(ItemEntry.COLNAME_THUMBNAIL,thumbnail);
             values.put(ItemEntry.COLNAME_TITLE, title);
             values.put(ItemEntry.COLNAME_DESCRIPTION, description);
-            // Todo: replace later with auto classifying method in update
-            boolean isNeeded = Math.random() < 0.5;
+            values.put(ItemEntry.COLNAME_CATEGORY,category);
             values.put(ItemEntry.COLNAME_IS_NEEDED,isNeeded);
+            values.put(ItemEntry.COLNAME_DATE_OF_CREATION,date);
+            values.put(ItemEntry.COLNAME_DATE_OF_LAST_USAGE,date);
             db.insert(ItemEntry.TABLE_NAME, ItemEntry.COLNAME_TITLE, values);
         } finally {
             db.close();
@@ -128,9 +144,15 @@ public class ItemDB {
     public static abstract class ItemEntry implements BaseColumns {
         public static final String TABLE_NAME = "item";
         public static final String COLNAME_ID = "_id";
+        public static final String COLNAME_THUMBNAIL = "thumbnail";
         public static final String COLNAME_TITLE = "title";
         public static final String COLNAME_DESCRIPTION = "description";
         public static final String COLNAME_IS_NEEDED = "isNeeded";
+        public static final String COLNAME_DATE_OF_CREATION = "dateOfCreation";
+        public static final String COLNAME_DATE_OF_LAST_USAGE = "dateOfLastUsage";
+        public static final String COLNAME_CATEGORY = "category";
+        public static final int FILTER_KEEP = 1;
+        public static final int FILTER_LET_GO = 0;
     }
 
     public class ItemDbHelper extends SQLiteOpenHelper {

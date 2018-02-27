@@ -37,9 +37,9 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
         items = (ArrayList<Item>) itemDB.getAll();
     }
 
-    void reloadFiltered(boolean isNeeded) {
+    void reloadFiltered(int filterClause) {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAllFiltered(isNeeded);
+        items = (ArrayList<Item>) itemDB.getAllFiltered(filterClause);
     }
 
     Item getItem(int id) {

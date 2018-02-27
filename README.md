@@ -6,7 +6,7 @@ This app is my coursework for ```CMP 309``` at Abertay University, Scotland.
 ![Gif showing current screens](./img/app.gif)
 ## Todos
 - [x] Create UI
-- [ ] Add intents to camera / gallery incl. permissions
+- [x] Add intents to camera
 - [x] Add call for result between activities
 - [x] Add a database functionality
 - [ ] Add NFC functionality

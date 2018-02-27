@@ -1,7 +1,9 @@
 package com.markusbilz.yown;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +15,7 @@ import com.lucasurbas.listitemview.ListItemView;
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    public static final int RESULT_OK = 200;
+    public static final int RESULT_OK = -1;
     private static final int REQUEST_SET_TITLE = 10;
     private static final int REQUEST_SET_DESCRIPTION = 11;
     private static final int REQUEST_SET_IMAGE = 12;
@@ -23,7 +25,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private ListItemView editImage;
     private ListItemView editNote;
     private ListItemView editCategory;
-
+    private Bitmap thumbnail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         item = ItemWithCheckboxAdapter.getSingelton(this).getItem(id);
 
         editTitle.setTitle(item.getTitle());
+        editCategory.setTitle(item.getCategory());
         editNote.setTitle(item.getDescription());
+        editImage.getAvatarView().setImageBitmap(BitmapUitility.byte2Bitmap(item.getThumbnail()));
 
         editTitle.setOnClickListener(this);
         editNote.setOnClickListener(this);
@@ -56,6 +60,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(view.getContext(), AddDetailsActivity.class);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // pass text to details activity if altered before
         ListItemView tmp = (ListItemView) view;
         String text = tmp.getTitle();
@@ -74,9 +79,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent, REQUEST_SET_CATEGORY);
                 break;
             case R.id.lv_edit_image:
-                intent.putExtra("title", "Set image...");
-                intent.putExtra("text",text);
-                startActivityForResult(intent, REQUEST_SET_IMAGE);
+                if(cameraIntent.resolveActivity(getPackageManager())!= null){
+                    startActivityForResult(cameraIntent, REQUEST_SET_IMAGE);
+                }
                 break;
             case R.id.lv_edit_note:
                 intent.putExtra("title", "Set notes...");
@@ -89,8 +94,11 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private void saveItem(View view) {
         String title = editTitle.getTitle();
         String description = editNote.getTitle();
+        String category = editCategory.getTitle();
         item.setTitle(title);
         item.setDescription(description);
+        item.setCategory(category);
+        item.setThumbnail(BitmapUitility.bitmap2Byte(thumbnail));
         ItemDB.getInstance(view.getContext()).update(item);
         finish();
     }
@@ -109,7 +117,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     editTitle.setTitle(content);
                     break;
                 case REQUEST_SET_IMAGE:
-                    editImage.setTitle(content);
+                    Bundle extras = data.getExtras();
+                    thumbnail = (Bitmap) extras.get("data");
+                    editImage.getAvatarView().setImageBitmap(thumbnail);
                     break;
                 case REQUEST_SET_DESCRIPTION:
                     editNote.setTitle(content);

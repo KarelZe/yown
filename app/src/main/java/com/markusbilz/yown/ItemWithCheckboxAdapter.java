@@ -68,12 +68,13 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         TextView itemTitle;
         TextView itemDescription;
         ImageView itemUsed;
-
+        ImageView itemPhoto;
         ItemViewHolder(View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_vote_title);
             itemDescription = itemView.findViewById(R.id.tv_item_vote_description);
             itemUsed = itemView.findViewById(R.id.iv_item_vote_used);
+            itemPhoto = itemView.findViewById(R.id.iv_item_vote_photo);
             itemUsed.setOnClickListener(this);
             itemView.setOnClickListener(this);
         }
@@ -82,6 +83,7 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
+            itemPhoto.setImageBitmap(BitmapUitility.byte2Bitmap(currentItem.getThumbnail()));
         }
 
         @Override

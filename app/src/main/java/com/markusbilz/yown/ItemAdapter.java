@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,9 +36,9 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         items = (ArrayList<Item>) itemDB.getAll();
     }
 
-    void reloadFiltered(boolean isNeeded) {
+    void reloadFiltered(int filterClause) {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAllFiltered(isNeeded);
+        items = (ArrayList<Item>) itemDB.getAllFiltered(filterClause);
     }
     Item getItem(int id) {
         for (Item item : items) {
@@ -69,11 +70,12 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         Item currentItem;
         TextView itemTitle;
         TextView itemDescription;
-
+        ImageView itemPhoto;
         ItemViewHolder(View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_default_title);
             itemDescription = itemView.findViewById(R.id.tv_item_default_description);
+            itemPhoto = itemView.findViewById(R.id.iv_item_default_photo);
             itemView.setOnClickListener(this);
         }
 
@@ -81,6 +83,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
+            itemPhoto.setImageBitmap(BitmapUitility.byte2Bitmap(currentItem.getThumbnail()));
         }
 
         @Override
