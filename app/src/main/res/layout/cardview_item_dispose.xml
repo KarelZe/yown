@@ -17,8 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="16dp"
             android:contentDescription="@string/msg_item_picture"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_image_grey_24dp" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/tv_item_dispose_title"

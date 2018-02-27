@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -72,11 +73,13 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
         Item currentItem;
         TextView itemTitle;
         TextView itemDescription;
+        ImageView itemPhoto;
         Button itemSell;
         ItemViewHolder(View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_dispose_title);
             itemDescription = itemView.findViewById(R.id.tv_item_dispose_description);
+            itemPhoto = itemView.findViewById(R.id.iv_item_dispose_photo);
             itemSell = itemView.findViewById(R.id.btn_item_dispose_sell);
             itemSell.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -86,6 +89,7 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
+            itemPhoto.setImageBitmap(BitmapUitility.byte2Bitmap(currentItem.getThumbnail()));
         }
 
         @Override

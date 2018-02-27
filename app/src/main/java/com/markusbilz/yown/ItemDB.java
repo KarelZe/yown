@@ -121,6 +121,8 @@ public class ItemDB {
             ContentValues values = new ContentValues();
             values.put(ItemEntry.COLNAME_TITLE, item.getTitle());
             values.put(ItemEntry.COLNAME_DESCRIPTION, item.getDescription());
+            values.put(ItemEntry.COLNAME_THUMBNAIL,item.getThumbnail());
+            values.put(ItemEntry.COLNAME_CATEGORY,item.getCategory());
             String selection = ItemEntry.COLNAME_ID + " LIKE ?";
             String[] selectionArgs = {String.valueOf(item.getId())};
             db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
