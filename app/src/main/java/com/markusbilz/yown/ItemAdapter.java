@@ -40,6 +40,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
         items = (ArrayList<Item>) itemDB.getAllFiltered(filterClause);
     }
+
     Item getItem(int id) {
         for (Item item : items) {
             if (item.getId() == id)
@@ -71,6 +72,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         TextView itemTitle;
         TextView itemDescription;
         ImageView itemPhoto;
+
         ItemViewHolder(View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_default_title);
@@ -83,14 +85,14 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
-            itemPhoto.setImageBitmap(BitmapUitility.byte2Bitmap(currentItem.getThumbnail()));
+            itemPhoto.setImageBitmap(BitmapUtility.byte2Bitmap(currentItem.getThumbnail()));
         }
 
         @Override
         public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), EditActivity.class);
-                intent.putExtra("id", currentItem.getId());
-                view.getContext().startActivity(intent);
+            Intent intent = new Intent(view.getContext(), EditActivity.class);
+            intent.putExtra("id", currentItem.getId());
+            view.getContext().startActivity(intent);
         }
     }
 }

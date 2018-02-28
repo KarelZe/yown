@@ -75,6 +75,7 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
         TextView itemDescription;
         ImageView itemPhoto;
         Button itemSell;
+
         ItemViewHolder(View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_dispose_title);
@@ -89,16 +90,15 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
-            itemPhoto.setImageBitmap(BitmapUitility.byte2Bitmap(currentItem.getThumbnail()));
+            itemPhoto.setImageBitmap(BitmapUtility.byte2Bitmap(currentItem.getThumbnail()));
         }
 
         @Override
         public void onClick(View view) {
-            if(view.getId()==R.id.btn_item_dispose_sell){
+            if (view.getId() == R.id.btn_item_dispose_sell) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ebay.com"));
                 view.getContext().startActivity(intent);
-            }
-            else {
+            } else {
                 Intent intent = new Intent(view.getContext(), EditActivity.class);
                 intent.putExtra("id", currentItem.getId());
                 view.getContext().startActivity(intent);

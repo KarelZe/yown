@@ -43,7 +43,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         editTitle.setTitle(item.getTitle());
         editCategory.setTitle(item.getCategory());
         editNote.setTitle(item.getDescription());
-        editImage.getAvatarView().setImageBitmap(BitmapUitility.byte2Bitmap(item.getThumbnail()));
+        editImage.getAvatarView().setImageBitmap(BitmapUtility.byte2Bitmap(item.getThumbnail()));
 
         editTitle.setOnClickListener(this);
         editNote.setOnClickListener(this);
@@ -64,28 +64,28 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         // pass text to details activity if altered before
         ListItemView tmp = (ListItemView) view;
         String text = tmp.getTitle();
-        if(text != null && text.startsWith("Add "))
+        if (text != null && text.startsWith("Add "))
             text = "";
 
         switch (view.getId()) {
             case R.id.lv_edit_title:
                 intent.putExtra("title", "Set title...");
-                intent.putExtra("text",text);
+                intent.putExtra("text", text);
                 startActivityForResult(intent, REQUEST_SET_TITLE);
                 break;
             case R.id.lv_edit_category:
                 intent.putExtra("title", "Set category...");
-                intent.putExtra("text",text);
+                intent.putExtra("text", text);
                 startActivityForResult(intent, REQUEST_SET_CATEGORY);
                 break;
             case R.id.lv_edit_image:
-                if(cameraIntent.resolveActivity(getPackageManager())!= null){
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(cameraIntent, REQUEST_SET_IMAGE);
                 }
                 break;
             case R.id.lv_edit_note:
                 intent.putExtra("title", "Set notes...");
-                intent.putExtra("text",text);
+                intent.putExtra("text", text);
                 startActivityForResult(intent, REQUEST_SET_DESCRIPTION);
                 break;
         }
@@ -98,7 +98,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         item.setTitle(title);
         item.setDescription(description);
         item.setCategory(category);
-        item.setThumbnail(BitmapUitility.bitmap2Byte(thumbnail));
+        item.setThumbnail(BitmapUtility.bitmap2Byte(thumbnail));
         ItemDB.getInstance(view.getContext()).update(item);
         finish();
     }

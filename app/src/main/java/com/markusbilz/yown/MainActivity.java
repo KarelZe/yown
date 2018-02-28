@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
                 break;
             case R.id.itemAddItem:
-                Intent addItemIntent = new Intent(this,AddActivity.class);
+                Intent addItemIntent = new Intent(this, AddActivity.class);
                 startActivity(addItemIntent);
                 break;
         }

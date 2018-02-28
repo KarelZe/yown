@@ -12,6 +12,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     public static final String ADVANCED_SORTING = "advancedSorting";
     private SwitchCompat scAdvancedSorting;
     private boolean advancedSortingState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,16 +30,16 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
         scAdvancedSorting.setChecked(advancedSortingState);
     }
 
-    public void saveSettings(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE);
+    public void saveSettings() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(ADVANCED_SORTING,scAdvancedSorting.isChecked());
+        editor.putBoolean(ADVANCED_SORTING, scAdvancedSorting.isChecked());
         editor.apply();
     }
 
-    public void loadData(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE);
-        advancedSortingState = sharedPreferences.getBoolean(ADVANCED_SORTING,false);
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        advancedSortingState = sharedPreferences.getBoolean(ADVANCED_SORTING, false);
     }
 
     @Override

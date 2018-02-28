@@ -24,11 +24,11 @@ public class AddDetailsActivity extends AppCompatActivity implements View.OnKeyL
         // try setting hint and former text from intent
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
-        if(title == null)
+        if (title == null)
             title = "Set details";
 
         String text = intent.getStringExtra("text");
-        if(text == null)
+        if (text == null)
             text = "";
 
         etAddDetails.append(text);

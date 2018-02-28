@@ -59,7 +59,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 startActivityForResult(intent, REQUEST_SET_CATEGORY);
                 break;
             case R.id.lv_add_image:
-                if(cameraIntent.resolveActivity(getPackageManager())!= null){
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(cameraIntent, REQUEST_SET_IMAGE);
                 }
                 break;
@@ -74,7 +74,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         String title = addTitle.getTitle();
         String description = addNote.getTitle();
         String category = addCategory.getTitle();
-        ItemDB.getInstance(view.getContext()).insert(title, description, category,BitmapUitility.bitmap2Byte(thumbnail));
+        ItemDB.getInstance(view.getContext()).insert(title, description, category, BitmapUtility.bitmap2Byte(thumbnail));
         // close activity and return result to parent activity
         Intent resultIntent = new Intent();
         setResult(ListFragment.RESULT_OK, resultIntent);
