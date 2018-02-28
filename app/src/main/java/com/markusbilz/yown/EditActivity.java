@@ -12,14 +12,11 @@ import android.view.View;
 import com.lucasurbas.listitemview.ListItemView;
 
 
-public class EditActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditActivity extends AppCompatActivity implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener {
 
 
     public static final int RESULT_OK = -1;
-    private static final int REQUEST_SET_TITLE = 10;
-    private static final int REQUEST_SET_DESCRIPTION = 11;
     private static final int REQUEST_SET_IMAGE = 12;
-    private static final int REQUEST_SET_CATEGORY = 13;
     private Item item;
     private ListItemView editTitle;
     private ListItemView editImage;
@@ -59,24 +56,13 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(view.getContext(), AddDetailsActivity.class);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // pass text to details activity if altered before
-        ListItemView tmp = (ListItemView) view;
-        String text = tmp.getTitle();
-        if (text != null && text.startsWith("Add "))
-            text = "";
-
         switch (view.getId()) {
             case R.id.lv_edit_title:
-                intent.putExtra("title", "Set title...");
-                intent.putExtra("text", text);
-                startActivityForResult(intent, REQUEST_SET_TITLE);
+                openDialog(getString(R.string.title_lv_edit_title), getString(R.string.title_lv_edit_title), view.getId());
                 break;
             case R.id.lv_edit_category:
-                intent.putExtra("title", "Set category...");
-                intent.putExtra("text", text);
-                startActivityForResult(intent, REQUEST_SET_CATEGORY);
+                openDialog(getString(R.string.title_lv_edit_category), getString(R.string.title_lv_edit_category), view.getId());
                 break;
             case R.id.lv_edit_image:
                 if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -84,9 +70,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.lv_edit_note:
-                intent.putExtra("title", "Set notes...");
-                intent.putExtra("text", text);
-                startActivityForResult(intent, REQUEST_SET_DESCRIPTION);
+                openDialog(getString(R.string.title_lv_edit_note), getString(R.string.title_lv_edit_note), view.getId());
                 break;
         }
     }
@@ -108,29 +92,44 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
+    public void openDialog(String title, String hint, int id) {
+        AddDetailsDialog dialog = new AddDetailsDialog();
+        dialog.show(getSupportFragmentManager(), "AddDetailsDialog");
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("hint", hint);
+        bundle.putInt("id", id);
+        dialog.setArguments(bundle);
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
-            String content = data.getStringExtra("data");
             switch (requestCode) {
-                case REQUEST_SET_TITLE:
-                    editTitle.setTitle(content);
-                    break;
                 case REQUEST_SET_IMAGE:
                     Bundle extras = data.getExtras();
                     thumbnail = (Bitmap) extras.get("data");
                     editImage.getAvatarView().setImageBitmap(thumbnail);
                     break;
-                case REQUEST_SET_DESCRIPTION:
-                    editNote.setTitle(content);
-                    break;
-                case REQUEST_SET_CATEGORY:
-                    editCategory.setTitle(content);
-                    break;
             }
         }
     }
 
+    @Override
+    public void getDetails(String details, int id) {
+        switch (id) {
+            case R.id.lv_edit_title:
+                editTitle.setTitle(details);
+                break;
+            case R.id.lv_edit_category:
+                editCategory.setTitle(details);
+                break;
+            case R.id.lv_edit_note:
+                editNote.setTitle(details);
+                break;
+
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

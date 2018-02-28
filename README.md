@@ -9,6 +9,8 @@ This app is my coursework for ```CMP 309``` at Abertay University, Scotland.
 - [x] Add intents to camera
 - [x] Add call for result between activities
 - [x] Add a database functionality
+- [x] Replace Add details activity with dialog
+- [ ] Implement (advanced) sorting
 - [ ] Add NFC functionality
 - [ ] Code review
 ## Contact

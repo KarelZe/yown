@@ -12,11 +12,8 @@ import android.view.View;
 import com.lucasurbas.listitemview.ListItemView;
 
 
-public class AddActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int REQUEST_SET_TITLE = 10;
-    private static final int REQUEST_SET_DESCRIPTION = 11;
+public class AddActivity extends AppCompatActivity implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener {
     private static final int REQUEST_SET_IMAGE = 12;
-    private static final int REQUEST_SET_CATEGORY = 13;
     private static final int RESULT_OK = -1;
     private ListItemView addTitle;
     private ListItemView addImage;
@@ -47,16 +44,13 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(view.getContext(), AddDetailsActivity.class);
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         switch (view.getId()) {
             case R.id.lv_add_title:
-                intent.putExtra("title", "Set title...");
-                startActivityForResult(intent, REQUEST_SET_TITLE);
+                openDialog(getString(R.string.title_lv_add_title), getString(R.string.title_lv_add_title), view.getId());
                 break;
             case R.id.lv_add_category:
-                intent.putExtra("title", "Set category...");
-                startActivityForResult(intent, REQUEST_SET_CATEGORY);
+                openDialog(getString(R.string.title_lv_add_category), getString(R.string.title_lv_add_category), view.getId());
                 break;
             case R.id.lv_add_image:
                 if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -64,8 +58,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 }
                 break;
             case R.id.lv_add_note:
-                intent.putExtra("title", "Set notes...");
-                startActivityForResult(intent, REQUEST_SET_DESCRIPTION);
+                openDialog(getString(R.string.title_lv_add_note), getString(R.string.title_lv_add_note), view.getId());
                 break;
         }
     }
@@ -81,23 +74,23 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         finish();
     }
 
+    public void openDialog(String title, String hint, int id) {
+        AddDetailsDialog dialog = new AddDetailsDialog();
+        dialog.show(getSupportFragmentManager(), "AddDetailsDialog");
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("hint", hint);
+        bundle.putInt("id", id);
+        dialog.setArguments(bundle);
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            String content = data.getStringExtra("data");
             switch (requestCode) {
-                case REQUEST_SET_TITLE:
-                    addTitle.setTitle(content);
-                    break;
                 case REQUEST_SET_IMAGE:
                     Bundle extras = data.getExtras();
                     thumbnail = (Bitmap) extras.get("data");
                     addImage.getAvatarView().setImageBitmap(thumbnail);
-                    break;
-                case REQUEST_SET_DESCRIPTION:
-                    addNote.setTitle(content);
-                    break;
-                case REQUEST_SET_CATEGORY:
-                    addCategory.setTitle(content);
                     break;
             }
         }
@@ -121,4 +114,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         return false;
     }
 
+    @Override
+    public void getDetails(String details, int id) {
+        switch (id) {
+            case R.id.lv_add_title:
+                addTitle.setTitle(details);
+                break;
+            case R.id.lv_add_category:
+                addCategory.setTitle(details);
+                break;
+            case R.id.lv_add_note:
+                addNote.setTitle(details);
+                break;
+        }
+    }
 }
