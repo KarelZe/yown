@@ -36,9 +36,9 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         items = (ArrayList<Item>) itemDB.getAll();
     }
 
-    void reloadFiltered(int filterClause) {
+    void reloadFiltered() {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAllFiltered(filterClause);
+        items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_KEEP);
     }
 
     Item getItem(int id) {

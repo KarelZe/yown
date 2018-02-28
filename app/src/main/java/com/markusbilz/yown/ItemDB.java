@@ -2,10 +2,12 @@ package com.markusbilz.yown;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,8 +15,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ItemDB {
 
+    public static final int FILTER_KEEP = 1;
+    public static final int FILTER_LET_GO = 0;
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ItemEntry.TABLE_NAME + " (" +
                     ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -26,7 +32,6 @@ public class ItemDB {
                     ItemEntry.COLNAME_DATE_OF_LAST_USAGE + " TEXT," +
                     ItemEntry.COLNAME_CATEGORY + " TEXT " +
                     ")";
-
     private static ItemDB myInstance;
     private Context context;
 
@@ -72,11 +77,12 @@ public class ItemDB {
         SQLiteDatabase db = helper.getReadableDatabase();
         try {
             ArrayList<Item> result = new ArrayList<>();
-            String selectionClause = ItemEntry.COLNAME_IS_NEEDED + " = ?";
-            String[] selectionArgs = {String.valueOf(filterClause)};
+            String selectionClause = getSelectionClause(filterClause);
+            Log.d("days", selectionClause);
+            //String[] selectionArgs = {String.valueOf(filterClause)};
             Cursor cursor = db.query(ItemEntry.TABLE_NAME,
                     new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
-                    selectionClause, selectionArgs, null, null, null);
+                    selectionClause, null, null, null, null);
             try {
                 while (cursor.moveToNext()) {
                     Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(4), cursor.getString(5), cursor.getString(6));
@@ -96,16 +102,15 @@ public class ItemDB {
         SQLiteDatabase db = helper.getReadableDatabase();
         try {
             // generate date in ISO 8601 format, as per sqlite spec
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.UK);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String date = sdf.format(new Date());
-            int isNeeded = (int) (Math.random() + 0.5);
 
             ContentValues values = new ContentValues();
             values.put(ItemEntry.COLNAME_THUMBNAIL, thumbnail);
             values.put(ItemEntry.COLNAME_TITLE, title);
             values.put(ItemEntry.COLNAME_DESCRIPTION, description);
             values.put(ItemEntry.COLNAME_CATEGORY, category);
-            values.put(ItemEntry.COLNAME_IS_NEEDED, isNeeded);
+            values.put(ItemEntry.COLNAME_IS_NEEDED, true);
             values.put(ItemEntry.COLNAME_DATE_OF_CREATION, date);
             values.put(ItemEntry.COLNAME_DATE_OF_LAST_USAGE, date);
             db.insert(ItemEntry.TABLE_NAME, ItemEntry.COLNAME_TITLE, values);
@@ -141,6 +146,32 @@ public class ItemDB {
         } finally {
             db.close();
         }
+    }
+
+    private String getSelectionClause(int filter) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SettingsActivity.SHARED_PREFERENCES, MODE_PRIVATE);
+        boolean advancedSortingState = sharedPreferences.getBoolean(SettingsActivity.ADVANCED_SORTING, false);
+
+        if (filter == FILTER_KEEP) {
+            if (advancedSortingState)
+                // item has been used in the last 30 days on rolling basis and has been used before
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") <= 30" +
+                        " AND " + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + "<>" +
+                        ItemEntry.COLNAME_DATE_OF_CREATION;
+            else
+                // item has been used in the last 30 days on a rolling basis
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ")<= 30";
+        } else {
+            if (advancedSortingState)
+                // item has been used in the last 30 days on rolling basis and has been used before
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 30" +
+                        " AND " + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + "<>" +
+                        ItemEntry.COLNAME_DATE_OF_CREATION;
+            else
+                // item has been used in the last 30 days on a rolling basis
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 30";
+        }
+
     }
 
     public static abstract class ItemEntry implements BaseColumns {
