@@ -82,7 +82,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         item.setTitle(title);
         item.setDescription(description);
         item.setCategory(category);
-        item.setThumbnail(BitmapUtility.bitmap2Byte(thumbnail));
+        // overwrite thumbnail only if a new image is available
+        if(thumbnail != null)
+            item.setThumbnail(BitmapUtility.bitmap2Byte(thumbnail));
         ItemDB.getInstance(view.getContext()).update(item);
         finish();
     }
