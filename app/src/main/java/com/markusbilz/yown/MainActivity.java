@@ -1,6 +1,7 @@
 package com.markusbilz.yown;
 
 import android.content.Intent;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,10 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
+    private NfcAdapter nfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        if (nfcAdapter != null && nfcAdapter.isEnabled())
+            Toast.makeText(this, "NFC enabled", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "NFC not available", Toast.LENGTH_SHORT).show();
     }
 
     @Override

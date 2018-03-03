@@ -110,6 +110,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 View view = findViewById(R.id.action_menu_done);
                 saveItem(view);
                 break;
+            case R.id.action_menu_nfc:
+                // Todo: Implement nfc
+                break;
         }
         return false;
     }

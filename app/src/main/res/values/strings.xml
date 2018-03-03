@@ -22,4 +22,5 @@
     <string name="menu_item_delete">delete</string>
     <string name="menu_item_AddItem">Add item</string>
     <string name="subtitle_lv_add_image">Take image with camera</string>
+    <string name="menu_item_nfc">pair nfc</string>
 </resources>
