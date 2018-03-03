@@ -6,15 +6,16 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 
 
-public class BitmapUtility {
+class BitmapUtility {
 
     public static byte[] bitmap2Byte(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             return stream.toByteArray();
-        } else
+        } else {
             return new byte[0];
+        }
     }
 
     public static Bitmap byte2Bitmap(byte[] image) {

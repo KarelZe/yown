@@ -30,14 +30,14 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
         scAdvancedSorting.setChecked(advancedSortingState);
     }
 
-    public void saveSettings() {
+    private void saveSettings() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(ADVANCED_SORTING, scAdvancedSorting.isChecked());
         editor.apply();
     }
 
-    public void loadData() {
+    private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         advancedSortingState = sharedPreferences.getBoolean(ADVANCED_SORTING, false);
     }

@@ -8,5 +8,5 @@
         android:id="@+id/et_add_details_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Set details..." />
+        android:hint="@string/dialog_details_hint" />
 </RelativeLayout>

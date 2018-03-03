@@ -15,16 +15,13 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView;
-    private NfcAdapter nfcAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        bottomNavigationView = findViewById(R.id.bnv_navigator);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bnv_navigator);
         bottomNavigationView.setSelectedItemId(R.id.list);
 
         // set default tab
@@ -41,12 +38,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        if (nfcAdapter != null && nfcAdapter.isEnabled())
+        if (nfcAdapter != null && nfcAdapter.isEnabled()) {
             Toast.makeText(this, "NFC enabled", Toast.LENGTH_SHORT).show();
-        else
+        } else {
             Toast.makeText(this, "NFC not available", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

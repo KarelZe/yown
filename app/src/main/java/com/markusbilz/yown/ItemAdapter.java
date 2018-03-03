@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +15,10 @@ import java.util.ArrayList;
 
 class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
+    @SuppressLint("StaticFieldLeak")
     private static ItemAdapter mySingelton;
+    private final Activity activity;
     private ArrayList<Item> items;
-    private Activity activity;
 
 
     private ItemAdapter(Activity activity) {
@@ -26,12 +28,13 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     }
 
     static ItemAdapter getSingelton(Activity activity) {
-        if (mySingelton == null)
+        if (mySingelton == null) {
             mySingelton = new ItemAdapter(activity);
+        }
         return mySingelton;
     }
 
-    void reload() {
+    private void reload() {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
         items = (ArrayList<Item>) itemDB.getAll();
     }
@@ -39,14 +42,6 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     void reloadFiltered() {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
         items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_KEEP);
-    }
-
-    Item getItem(int id) {
-        for (Item item : items) {
-            if (item.getId() == id)
-                return item;
-        }
-        return null;
     }
 
     @Override
@@ -68,10 +63,10 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView itemTitle;
+        final TextView itemDescription;
+        final ImageView itemPhoto;
         Item currentItem;
-        TextView itemTitle;
-        TextView itemDescription;
-        ImageView itemPhoto;
 
         ItemViewHolder(View itemView) {
             super(itemView);

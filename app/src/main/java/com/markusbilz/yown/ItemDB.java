@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,8 +33,9 @@ public class ItemDB {
                     ItemEntry.COLNAME_DATE_OF_LAST_USAGE + " TEXT," +
                     ItemEntry.COLNAME_CATEGORY + " TEXT " +
                     ")";
+    @SuppressLint("StaticFieldLeak")
     private static ItemDB myInstance;
-    private Context context;
+    private final Context context;
 
     private ItemDB(Context context) {
         this.context = context;
@@ -41,31 +43,26 @@ public class ItemDB {
 
     // implementation of singelton to make sure there is only one instance
     public static ItemDB getInstance(Context context) {
-        if (myInstance == null)
+        if (myInstance == null) {
             myInstance = new ItemDB(context);
+        }
         return myInstance;
     }
 
     public List<Item> getAll() {
 
         ItemDbHelper helper = new ItemDbHelper(context);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        try {
+        try (SQLiteDatabase db = helper.getReadableDatabase()) {
             ArrayList<Item> result = new ArrayList<>();
-            Cursor cursor = db.query(ItemEntry.TABLE_NAME,
+            try (Cursor cursor = db.query(ItemEntry.TABLE_NAME,
                     new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
-                    null, null, null, null, null);
-            try {
+                    null, null, null, null, null)) {
                 while (cursor.moveToNext()) {
                     Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7));
                     result.add(item);
                 }
                 return result;
-            } finally {
-                cursor.close();
             }
-        } finally {
-            db.close();
         }
     }
 
@@ -74,33 +71,26 @@ public class ItemDB {
     {
 
         ItemDbHelper helper = new ItemDbHelper(context);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        try {
+        try (SQLiteDatabase db = helper.getReadableDatabase()) {
             ArrayList<Item> result = new ArrayList<>();
             String selectionClause = getSelectionClause(filterClause);
             Log.d("days", selectionClause);
             //String[] selectionArgs = {String.valueOf(filterClause)};
-            Cursor cursor = db.query(ItemEntry.TABLE_NAME,
+            try (Cursor cursor = db.query(ItemEntry.TABLE_NAME,
                     new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
-                    selectionClause, null, null, null, null);
-            try {
+                    selectionClause, null, null, null, null)) {
                 while (cursor.moveToNext()) {
                     Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(4), cursor.getString(5), cursor.getString(6));
                     result.add(item);
                 }
                 return result;
-            } finally {
-                cursor.close();
             }
-        } finally {
-            db.close();
         }
     }
 
     public void insert(String title, String description, String category, byte[] thumbnail) {
         ItemDbHelper helper = new ItemDbHelper(context);
-        SQLiteDatabase db = helper.getReadableDatabase();
-        try {
+        try (SQLiteDatabase db = helper.getReadableDatabase()) {
             // generate date in ISO 8601 format, as per sqlite spec
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String date = sdf.format(new Date());
@@ -114,15 +104,12 @@ public class ItemDB {
             values.put(ItemEntry.COLNAME_DATE_OF_CREATION, date);
             values.put(ItemEntry.COLNAME_DATE_OF_LAST_USAGE, date);
             db.insert(ItemEntry.TABLE_NAME, ItemEntry.COLNAME_TITLE, values);
-        } finally {
-            db.close();
         }
     }
 
     public void update(Item item) {
         ItemDbHelper helper = new ItemDbHelper(context);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        try {
+        try (SQLiteDatabase db = helper.getWritableDatabase()) {
             ContentValues values = new ContentValues();
             values.put(ItemEntry.COLNAME_TITLE, item.getTitle());
             values.put(ItemEntry.COLNAME_DESCRIPTION, item.getDescription());
@@ -131,20 +118,15 @@ public class ItemDB {
             String selection = ItemEntry.COLNAME_ID + " LIKE ?";
             String[] selectionArgs = {String.valueOf(item.getId())};
             db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
-        } finally {
-            db.close();
         }
     }
 
     public void delete(Item item) {
         ItemDbHelper helper = new ItemDbHelper(context);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        try {
+        try (SQLiteDatabase db = helper.getWritableDatabase()) {
             String whereClause = ItemEntry.COLNAME_ID + " = ?";
             String[] whereArgs = {String.valueOf(item.getId())};
             db.delete(ItemEntry.TABLE_NAME, whereClause, whereArgs);
-        } finally {
-            db.close();
         }
     }
 
@@ -154,22 +136,28 @@ public class ItemDB {
 
         if (filter == FILTER_KEEP) {
             if (advancedSortingState)
-                // item has been used in the last 30 days on rolling basis and has been used before
+            // item has been used in the last 30 days on rolling basis and has been used before
+            {
                 return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") <= 30" +
                         " AND " + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + "<>" +
                         ItemEntry.COLNAME_DATE_OF_CREATION;
-            else
-                // item has been used in the last 30 days on a rolling basis
+            } else
+            // item has been used in the last 30 days on a rolling basis
+            {
                 return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ")<= 30";
+            }
         } else {
             if (advancedSortingState)
-                // item has been used in the last 30 days on rolling basis and has been used before
+            // item has been used in the last 30 days on rolling basis and has been used before
+            {
                 return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 30" +
                         " AND " + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + "<>" +
                         ItemEntry.COLNAME_DATE_OF_CREATION;
-            else
-                // item has been used in the last 30 days on a rolling basis
+            } else
+            // item has been used in the last 30 days on a rolling basis
+            {
                 return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 30";
+            }
         }
 
     }

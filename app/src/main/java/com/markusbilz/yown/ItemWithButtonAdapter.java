@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,9 +17,10 @@ import java.util.ArrayList;
 
 class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.ItemViewHolder> {
 
+    @SuppressLint("StaticFieldLeak")
     private static ItemWithButtonAdapter mySingelton;
+    private final Activity activity;
     private ArrayList<Item> items;
-    private Activity activity;
 
 
     private ItemWithButtonAdapter(Activity activity) {
@@ -28,12 +30,13 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
     }
 
     static ItemWithButtonAdapter getSingelton(Activity activity) {
-        if (mySingelton == null)
+        if (mySingelton == null) {
             mySingelton = new ItemWithButtonAdapter(activity);
+        }
         return mySingelton;
     }
 
-    void reload() {
+    private void reload() {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
         items = (ArrayList<Item>) itemDB.getAll();
     }
@@ -41,14 +44,6 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
     void reloadFiltered() {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
         items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_LET_GO);
-    }
-
-    Item getItem(int id) {
-        for (Item item : items) {
-            if (item.getId() == id)
-                return item;
-        }
-        return null;
     }
 
     @Override
@@ -70,11 +65,11 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView itemTitle;
+        final TextView itemDescription;
+        final ImageView itemPhoto;
+        final Button itemSell;
         Item currentItem;
-        TextView itemTitle;
-        TextView itemDescription;
-        ImageView itemPhoto;
-        Button itemSell;
 
         ItemViewHolder(View itemView) {
             super(itemView);

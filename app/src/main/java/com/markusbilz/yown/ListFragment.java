@@ -13,12 +13,8 @@ import android.view.ViewGroup;
 public class ListFragment extends Fragment {
 
     public static final int RESULT_OK = 200;
-    public static final int REQUEST_ADD_ITEM = 1;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
-
-    FloatingActionButton fabAdd;
+    private static final int REQUEST_ADD_ITEM = 1;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,7 +23,7 @@ public class ListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        fabAdd = view.findViewById(R.id.fab_add);
+        FloatingActionButton fabAdd = view.findViewById(R.id.fab_add);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,8 +34,8 @@ public class ListFragment extends Fragment {
         });
 
         recyclerView = view.findViewById(R.id.rv_list);
-        layoutManager = new LinearLayoutManager(getActivity());
-        adapter = ItemWithCheckboxAdapter.getSingelton(this.getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.Adapter adapter = ItemWithCheckboxAdapter.getSingelton(this.getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

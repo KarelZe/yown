@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 public class KeepListFragment extends Fragment {
 
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -24,8 +22,8 @@ public class KeepListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_keep_list, container, false);
 
         recyclerView = view.findViewById(R.id.rv_keep);
-        layoutManager = new LinearLayoutManager(getActivity());
-        adapter = ItemAdapter.getSingelton(this.getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.Adapter adapter = ItemAdapter.getSingelton(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;

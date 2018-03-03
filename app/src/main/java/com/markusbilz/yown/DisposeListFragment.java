@@ -12,8 +12,6 @@ public class DisposeListFragment extends Fragment {
 
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
 
 
     @Override
@@ -24,9 +22,9 @@ public class DisposeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dispose_list, container, false);
 
         recyclerView = view.findViewById(R.id.rv_dispose);
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        adapter = ItemWithButtonAdapter.getSingelton(getActivity());
+        RecyclerView.Adapter adapter = ItemWithButtonAdapter.getSingelton(getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

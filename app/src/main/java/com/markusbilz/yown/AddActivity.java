@@ -74,7 +74,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         finish();
     }
 
-    public void openDialog(String title, String hint, int id) {
+    private void openDialog(String title, String hint, int id) {
         AddDetailsDialog dialog = new AddDetailsDialog();
         dialog.show(getSupportFragmentManager(), "AddDetailsDialog");
         Bundle bundle = new Bundle();
@@ -89,7 +89,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             switch (requestCode) {
                 case REQUEST_SET_IMAGE:
                     Bundle extras = data.getExtras();
-                    thumbnail = (Bitmap) extras.get("data");
+                    if (extras != null) {
+                        thumbnail = (Bitmap) extras.get("data");
+                    }
                     addImage.getAvatarView().setImageBitmap(thumbnail);
                     break;
             }

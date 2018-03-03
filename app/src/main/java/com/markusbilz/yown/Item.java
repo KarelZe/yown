@@ -1,13 +1,15 @@
 package com.markusbilz.yown;
 
 
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 class Item {
-    private int id;
+    private final int id;
+    private final int isNeeded;
+    private final String dateOfCreation;
     private byte[] thumbnail;
     private String title;
     private String description;
-    private int isNeeded;
-    private String dateOfCreation;
+    @SuppressWarnings("CanBeFinal")
     private String dateOfLastUsage;
     private String category;
 
@@ -28,30 +30,6 @@ class Item {
 
     public void setThumbnail(byte[] thumbnail) {
         this.thumbnail = thumbnail;
-    }
-
-    public int getIsNeeded() {
-        return isNeeded;
-    }
-
-    public void setIsNeeded(int isNeeded) {
-        this.isNeeded = isNeeded;
-    }
-
-    public String getDateOfCreation() {
-        return dateOfCreation;
-    }
-
-    public void setDateOfCreation(String dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
-    }
-
-    public String getDateOfLastUsage() {
-        return dateOfLastUsage;
-    }
-
-    public void setDateOfLastUsage(String dateOfLastUsage) {
-        this.dateOfLastUsage = dateOfLastUsage;
     }
 
     public String getCategory() {
@@ -82,7 +60,4 @@ class Item {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

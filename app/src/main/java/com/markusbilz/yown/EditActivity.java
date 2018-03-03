@@ -15,7 +15,7 @@ import com.lucasurbas.listitemview.ListItemView;
 public class EditActivity extends AppCompatActivity implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener {
 
 
-    public static final int RESULT_OK = -1;
+    private static final int RESULT_OK = -1;
     private static final int REQUEST_SET_IMAGE = 12;
     private Item item;
     private ListItemView editTitle;
@@ -83,8 +83,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         item.setDescription(description);
         item.setCategory(category);
         // overwrite thumbnail only if a new image is available
-        if (thumbnail != null)
+        if (thumbnail != null) {
             item.setThumbnail(BitmapUtility.bitmap2Byte(thumbnail));
+        }
         ItemDB.getInstance(view.getContext()).update(item);
         finish();
     }
@@ -94,7 +95,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    public void openDialog(String title, String hint, int id) {
+    private void openDialog(String title, String hint, int id) {
         AddDetailsDialog dialog = new AddDetailsDialog();
         dialog.show(getSupportFragmentManager(), "AddDetailsDialog");
         Bundle bundle = new Bundle();
@@ -110,7 +111,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             switch (requestCode) {
                 case REQUEST_SET_IMAGE:
                     Bundle extras = data.getExtras();
-                    thumbnail = (Bitmap) extras.get("data");
+                    if (extras != null) {
+                        thumbnail = (Bitmap) extras.get("data");
+                    }
                     editImage.getAvatarView().setImageBitmap(thumbnail);
                     break;
             }

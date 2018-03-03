@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -14,9 +15,10 @@ import java.util.ArrayList;
 
 class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapter.ItemViewHolder> {
 
+    @SuppressLint("StaticFieldLeak")
     private static ItemWithCheckboxAdapter mySingelton;
+    private final Activity activity;
     private ArrayList<Item> items;
-    private Activity activity;
 
 
     private ItemWithCheckboxAdapter(Activity activity) {
@@ -26,8 +28,9 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
     }
 
     static ItemWithCheckboxAdapter getSingelton(Activity activity) {
-        if (mySingelton == null)
+        if (mySingelton == null) {
             mySingelton = new ItemWithCheckboxAdapter(activity);
+        }
 
         return mySingelton;
     }
@@ -39,8 +42,9 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
 
     Item getItem(int id) {
         for (Item item : items) {
-            if (item.getId() == id)
+            if (item.getId() == id) {
                 return item;
+            }
         }
         return null;
     }
@@ -64,11 +68,11 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView itemTitle;
+        final TextView itemDescription;
+        final ImageView itemUsed;
+        final ImageView itemPhoto;
         Item currentItem;
-        TextView itemTitle;
-        TextView itemDescription;
-        ImageView itemUsed;
-        ImageView itemPhoto;
 
         ItemViewHolder(View itemView) {
             super(itemView);
