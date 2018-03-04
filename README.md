@@ -11,7 +11,8 @@ This app is my coursework for ```CMP 309``` at Abertay University, Scotland.
 - [x] Add a database functionality
 - [x] Replace Add details activity with dialog
 - [x] Implement (advanced) sorting
-- [ ] Add NFC functionality
+- [x] Add NFC functionality
+- [ ] Refactor DB calls to Asynchronous Task
 - [ ] Code review
 ## Contact
 Feel free to send me a  [mail](mailto:1705042@abertay.ac.uk)

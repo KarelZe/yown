@@ -1,5 +1,7 @@
 package com.markusbilz.yown;
 
+import android.support.annotation.NonNull;
+
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 class Item {
@@ -23,7 +25,7 @@ class Item {
      * @param dateOfCreation  initial date of creation
      * @param dateOfLastUsage date of last usage or update
      */
-    Item(int id, byte[] thumbnail, String title, String description, String category, String uuidNfc, String dateOfCreation, String dateOfLastUsage) {
+    Item(int id, byte[] thumbnail, @NonNull String title, @NonNull String description, @NonNull String category, @NonNull String uuidNfc, @NonNull String dateOfCreation, @NonNull String dateOfLastUsage) {
         this.id = id;
         this.thumbnail = thumbnail;
         this.title = title;
@@ -70,7 +72,11 @@ class Item {
         return id;
     }
 
-    public String getDateOfLastUsage() {
+    String getDateOfLastUsage() {
         return dateOfLastUsage;
+    }
+
+    String getUuidNfc() {
+        return uuidNfc;
     }
 }

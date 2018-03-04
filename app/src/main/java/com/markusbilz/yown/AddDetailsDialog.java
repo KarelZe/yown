@@ -38,27 +38,33 @@ public class AddDetailsDialog extends AppCompatDialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         @SuppressLint("InflateParams")
         View view = layoutInflater.inflate(R.layout.dialog_detail, null);
+        etDetails = view.findViewById(R.id.et_add_details_dialog);
+        etDetails.setHint(hint);
         builder.setView(view)
                 .setTitle(title)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 })
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String details = etDetails.getText().toString();
                         listener.getDetails(details, id);
                     }
                 });
-        etDetails = view.findViewById(R.id.et_add_details_dialog);
-        etDetails.setHint(hint);
         return builder.create();
 
     }
 
+    /**
+     * Activity has to implement AddDetailsDialogListener, otherwise ClassCastException will be
+     * thrown.
+     *
+     * @param context Context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -69,6 +75,9 @@ public class AddDetailsDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * Make use of observer pattern to pass data between Activity and dialog.
+     */
     public interface AddDetailsDialogListener {
         void getDetails(String details, int id);
     }

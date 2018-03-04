@@ -18,7 +18,7 @@ import java.util.ArrayList;
 class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapter.ItemViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
-    private static ItemWithCheckboxAdapter mySingelton;
+    private static ItemWithCheckboxAdapter instance;
     private final Activity activity;
     private ArrayList<Item> items;
 
@@ -29,12 +29,12 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         reload();
     }
 
-    static ItemWithCheckboxAdapter getSingelton(Activity activity) {
-        if (mySingelton == null) {
-            mySingelton = new ItemWithCheckboxAdapter(activity);
+    // implementation of singleton pattern to make sure that only one instance of adapter is created.
+    static ItemWithCheckboxAdapter getInstance(Activity activity) {
+        if (instance == null) {
+            instance = new ItemWithCheckboxAdapter(activity);
         }
-
-        return mySingelton;
+        return instance;
     }
 
     void reload() {
@@ -44,6 +44,8 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
 
     @Nullable
     Item getItem(int id) {
+        // force refresh as items can be updated in db, but not in Array list e.g. last usage
+        reload();
         for (Item item : items) {
             if (item.getId() == id) {
                 return item;
@@ -88,7 +90,7 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
             itemView.setOnClickListener(this);
         }
 
-        public void setCurrentItem(@NonNull Item currentItem) {
+        void setCurrentItem(@NonNull Item currentItem) {
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
@@ -97,9 +99,9 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
 
         @Override
         public void onClick(@NonNull View view) {
-            //noinspection StatementWithEmptyBody
             if (view.getId() == R.id.iv_item_vote_used) {
-                // Todo: Handle update with database connection
+                String uuid = currentItem.getUuidNfc();
+                ItemDB.getInstance(view.getContext()).update(uuid);
             } else {
                 Intent intent = new Intent(view.getContext(), EditActivity.class);
                 intent.putExtra("id", currentItem.getId());

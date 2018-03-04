@@ -19,7 +19,7 @@ import java.util.ArrayList;
 class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.ItemViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
-    private static ItemWithButtonAdapter mySingelton;
+    private static ItemWithButtonAdapter instance;
     private final Activity activity;
     private ArrayList<Item> items;
 
@@ -27,19 +27,14 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
     private ItemWithButtonAdapter(Activity activity) {
         this.activity = activity;
         items = new ArrayList<>();
-        reload();
+        reloadFiltered();
     }
 
-    static ItemWithButtonAdapter getSingelton(Activity activity) {
-        if (mySingelton == null) {
-            mySingelton = new ItemWithButtonAdapter(activity);
+    static ItemWithButtonAdapter getInstance(Activity activity) {
+        if (instance == null) {
+            instance = new ItemWithButtonAdapter(activity);
         }
-        return mySingelton;
-    }
-
-    private void reload() {
-        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAll();
+        return instance;
     }
 
     void reloadFiltered() {
@@ -71,6 +66,7 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
         final TextView itemDescription;
         final ImageView itemPhoto;
         final Button itemSell;
+        // reference to currentItem is needed to obtain data like id and pass it to other activities
         Item currentItem;
 
         ItemViewHolder(@NonNull View itemView) {

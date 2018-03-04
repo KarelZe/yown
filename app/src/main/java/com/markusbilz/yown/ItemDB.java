@@ -15,10 +15,10 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ItemDB {
+class ItemDB {
 
-    public static final int FILTER_KEEP = 1;
-    public static final int FILTER_LET_GO = 0;
+    static final int FILTER_KEEP = 1;
+    static final int FILTER_LET_GO = 0;
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ItemEntry.TABLE_NAME + " (" +
                     ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -31,7 +31,7 @@ public class ItemDB {
                     ItemEntry.COLNAME_CATEGORY + " TEXT " +
                     ")";
     @SuppressLint("StaticFieldLeak")
-    private static ItemDB myInstance;
+    private static ItemDB instance;
     private final Context context;
 
     private ItemDB(Context context) {
@@ -39,15 +39,20 @@ public class ItemDB {
     }
 
     // implementation of singelton to make sure there is only one instance
-    public static ItemDB getInstance(Context context) {
-        if (myInstance == null) {
-            myInstance = new ItemDB(context);
+    static ItemDB getInstance(Context context) {
+        if (instance == null) {
+            instance = new ItemDB(context);
         }
-        return myInstance;
+        return instance;
     }
 
+    /**
+     * Function to get all items from database. If no entries are found, it returns empty array list.
+     *
+     * @return List with all items
+     */
     @NonNull
-    public List<Item> getAll() {
+    List<Item> getAll() {
 
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getReadableDatabase()) {
@@ -64,9 +69,14 @@ public class ItemDB {
         }
     }
 
+    /**
+     * Function to get all items from database, that match certain filters. See Filter constants.
+     * If no entries are found, it returns empty array list.
+     *
+     * @return List with all items
+     */
     @NonNull
-    public List<Item> getAllFiltered(int filterClause)
-
+    List<Item> getAllFiltered(int filterClause)
     {
 
         ItemDbHelper helper = new ItemDbHelper(context);
@@ -85,7 +95,16 @@ public class ItemDB {
         }
     }
 
-    public void insert(String title, String description, String category, byte[] thumbnail, String uuidNfc) {
+    /**
+     * Insert new row into database
+     *
+     * @param title       title of item
+     * @param description description of item
+     * @param category    category of item
+     * @param thumbnail   thumbnail of item as byte array
+     * @param uuidNfc     uuid stored on nfc chip
+     */
+    void insert(String title, String description, String category, byte[] thumbnail, String uuidNfc) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getReadableDatabase()) {
 
@@ -102,7 +121,12 @@ public class ItemDB {
         }
     }
 
-    public void update(String uuid) {
+    /**
+     * Function to update date of last usage for database entry.
+     *
+     * @param uuid Uuid that is e. g. stored on nfc tags.
+     */
+    void update(String uuid) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getWritableDatabase()) {
             String date = DateUtility.nowSql();
@@ -114,7 +138,7 @@ public class ItemDB {
         }
     }
 
-    public void update(@NonNull Item item) {
+    void update(@NonNull Item item) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -128,7 +152,12 @@ public class ItemDB {
         }
     }
 
-    public void delete(@NonNull Item item) {
+    /**
+     * Remove item from database, if id item and id of db entry match.
+     *
+     * @param item Item to be deleted.
+     */
+    void delete(@NonNull Item item) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getWritableDatabase()) {
             String whereClause = ItemEntry.COLNAME_ID + " = ?";
@@ -137,6 +166,11 @@ public class ItemDB {
         }
     }
 
+    /**
+     * Function that generates SQL selection clauses based on chosen Filter
+     * @param filter Filter condition
+     * @return SQL selection clause as string
+     */
     private String getSelectionClause(int filter) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SettingsActivity.SHARED_PREFERENCES, MODE_PRIVATE);
         boolean advancedSortingState = sharedPreferences.getBoolean(SettingsActivity.ADVANCED_SORTING, false);
@@ -169,24 +203,24 @@ public class ItemDB {
 
     }
 
-    public static abstract class ItemEntry implements BaseColumns {
-        public static final String TABLE_NAME = "item";
-        public static final String COLNAME_ID = "_id";
-        public static final String COLNAME_THUMBNAIL = "thumbnail";
-        public static final String COLNAME_TITLE = "title";
-        public static final String COLNAME_DESCRIPTION = "description";
-        public static final String COLNAME_UUID_NFC = "uuidNfc";
-        public static final String COLNAME_DATE_OF_CREATION = "dateOfCreation";
-        public static final String COLNAME_DATE_OF_LAST_USAGE = "dateOfLastUsage";
-        public static final String COLNAME_CATEGORY = "category";
+    static abstract class ItemEntry implements BaseColumns {
+        static final String TABLE_NAME = "item";
+        static final String COLNAME_ID = "_id";
+        static final String COLNAME_THUMBNAIL = "thumbnail";
+        static final String COLNAME_TITLE = "title";
+        static final String COLNAME_DESCRIPTION = "description";
+        static final String COLNAME_UUID_NFC = "uuidNfc";
+        static final String COLNAME_DATE_OF_CREATION = "dateOfCreation";
+        static final String COLNAME_DATE_OF_LAST_USAGE = "dateOfLastUsage";
+        static final String COLNAME_CATEGORY = "category";
     }
 
     public class ItemDbHelper extends SQLiteOpenHelper {
 
-        public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "Item.db";
+        static final int DATABASE_VERSION = 1;
+        static final String DATABASE_NAME = "Item.db";
 
-        public ItemDbHelper(Context context) {
+        ItemDbHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 

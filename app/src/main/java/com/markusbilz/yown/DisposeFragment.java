@@ -18,7 +18,7 @@ public class DisposeFragment extends Fragment {
         ViewPager viewPager = view.findViewById(R.id.vp_dispose);
         TabLayout tabLayout = view.findViewById(R.id.tl_dispose);
 
-        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getChildFragmentManager());
+        MultiFragmentPagerAdapter adapter = new MultiFragmentPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         return view;

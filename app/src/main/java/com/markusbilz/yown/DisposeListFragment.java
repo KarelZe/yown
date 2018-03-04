@@ -18,15 +18,12 @@ public class DisposeListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dispose_list, container, false);
 
-        recyclerView = view.findViewById(R.id.rv_dispose);
+        // add layout manager and and adapter to recycler view
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-        RecyclerView.Adapter adapter = ItemWithButtonAdapter.getSingelton(getActivity());
-
+        RecyclerView.Adapter adapter = ItemWithButtonAdapter.getInstance(getActivity());
+        recyclerView = view.findViewById(R.id.rv_dispose);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;
@@ -35,7 +32,8 @@ public class DisposeListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ItemWithButtonAdapter adapter = ItemWithButtonAdapter.getSingelton(getActivity());
+        // swap adapter to update shown items
+        ItemWithButtonAdapter adapter = ItemWithButtonAdapter.getInstance(getActivity());
         adapter.reloadFiltered();
         recyclerView.setAdapter(adapter);
     }

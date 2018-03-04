@@ -36,7 +36,7 @@ public class ListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rv_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView.Adapter adapter = ItemWithCheckboxAdapter.getSingelton(this.getActivity());
+        RecyclerView.Adapter adapter = ItemWithCheckboxAdapter.getInstance(this.getActivity());
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -49,7 +49,7 @@ public class ListFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && REQUEST_ADD_ITEM == requestCode) {
             // swap adapter and update list with the containing items
-            ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getSingelton(getActivity());
+            ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getInstance(getActivity());
             adapter.reload();
             recyclerView.setAdapter(adapter);
         }
@@ -59,7 +59,7 @@ public class ListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // update recyclerView in every onResume
-        ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getSingelton(getActivity());
+        ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getInstance(getActivity());
         adapter.reload();
         recyclerView.setAdapter(adapter);
 

@@ -16,13 +16,12 @@ import com.lucasurbas.listitemview.ListItemView;
 
 public class EditActivity extends AppCompatActivity implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener {
 
-
     private static final int RESULT_OK = -1;
     private static final int REQUEST_SET_IMAGE = 12;
     private Item item;
     private ListItemView editTitle;
     private ListItemView editImage;
-    private ListItemView editNote;
+    private ListItemView editDescription;
     private ListItemView editCategory;
     @Nullable
     private Bitmap thumbnail;
@@ -35,18 +34,19 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         editTitle = findViewById(R.id.lv_edit_title);
         editImage = findViewById(R.id.lv_edit_image);
         editCategory = findViewById(R.id.lv_edit_category);
-        editNote = findViewById(R.id.lv_edit_note);
+        editDescription = findViewById(R.id.lv_edit_description);
 
         int id = getIntent().getIntExtra("id", 0);
-        item = ItemWithCheckboxAdapter.getSingelton(this).getItem(id);
+        item = ItemWithCheckboxAdapter.getInstance(this).getItem(id);
+
 
         editTitle.setTitle(item.getTitle());
         editCategory.setTitle(item.getCategory());
-        editNote.setTitle(item.getDescription());
+        editDescription.setTitle(item.getDescription());
         editImage.getAvatarView().setImageBitmap(BitmapUtility.byteToBitmap(item.getThumbnail()));
 
         editTitle.setOnClickListener(this);
-        editNote.setOnClickListener(this);
+        editDescription.setOnClickListener(this);
         editImage.setOnClickListener(this);
         editCategory.setOnClickListener(this);
 
@@ -74,15 +74,15 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     startActivityForResult(cameraIntent, REQUEST_SET_IMAGE);
                 }
                 break;
-            case R.id.lv_edit_note:
-                openDialog(getString(R.string.title_lv_edit_note), getString(R.string.title_lv_edit_note), view.getId());
+            case R.id.lv_edit_description:
+                openDialog(getString(R.string.title_lv_edit_description), getString(R.string.title_lv_edit_description), view.getId());
                 break;
         }
     }
 
     private void saveItem(@NonNull View view) {
         String title = editTitle.getTitle();
-        String description = editNote.getTitle();
+        String description = editDescription.getTitle();
         String category = editCategory.getTitle();
         item.setTitle(title);
         item.setDescription(description);
@@ -134,8 +134,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.lv_edit_category:
                 editCategory.setTitle(details);
                 break;
-            case R.id.lv_edit_note:
-                editNote.setTitle(details);
+            case R.id.lv_edit_description:
+                editDescription.setTitle(details);
                 break;
 
         }

@@ -34,7 +34,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private static boolean isWrite = false;
     private ListItemView addTitle;
     private ListItemView addImage;
-    private ListItemView addNote;
+    private ListItemView addDescription;
     private ListItemView addCategory;
     private String uuid;
     @Nullable
@@ -49,10 +49,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         addTitle = findViewById(R.id.lv_add_title);
         addImage = findViewById(R.id.lv_add_image);
         addCategory = findViewById(R.id.lv_add_category);
-        addNote = findViewById(R.id.lv_add_note);
+        addDescription = findViewById(R.id.lv_add_description);
 
         addTitle.setOnClickListener(this);
-        addNote.setOnClickListener(this);
+        addDescription.setOnClickListener(this);
         addImage.setOnClickListener(this);
         addCategory.setOnClickListener(this);
 
@@ -82,15 +82,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     startActivityForResult(cameraIntent, REQUEST_SET_IMAGE);
                 }
                 break;
-            case R.id.lv_add_note:
-                openDialog(getString(R.string.title_lv_add_note), getString(R.string.title_lv_add_note), view.getId());
+            case R.id.lv_add_description:
+                openDialog(getString(R.string.title_lv_add_description), getString(R.string.title_lv_add_description), view.getId());
                 break;
         }
     }
 
     private void saveItem(@NonNull View view) {
         String title = addTitle.getTitle();
-        String description = addNote.getTitle();
+        String description = addDescription.getTitle();
         String category = addCategory.getTitle();
         ItemDB.getInstance(view.getContext()).insert(title, description, category, BitmapUtility.bitmapToByte(thumbnail), uuid);
         // close activity and return result to parent activity
@@ -168,8 +168,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.lv_add_category:
                 addCategory.setTitle(details);
                 break;
-            case R.id.lv_add_note:
-                addNote.setTitle(details);
+            case R.id.lv_add_description:
+                addDescription.setTitle(details);
                 break;
         }
     }

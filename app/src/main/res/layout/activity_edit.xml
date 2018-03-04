@@ -31,10 +31,10 @@
         app:liv_title="@string/title_lv_edit_category" />
 
     <com.lucasurbas.listitemview.ListItemView
-        android:id="@+id/lv_edit_note"
+        android:id="@+id/lv_edit_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:liv_displayMode="icon"
         app:liv_icon="@drawable/ic_subject_black_24dp"
-        app:liv_title="@string/title_lv_edit_note" />
+        app:liv_title="@string/title_lv_edit_description" />
 </LinearLayout>

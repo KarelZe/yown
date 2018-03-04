@@ -17,29 +17,27 @@ import java.util.ArrayList;
 class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
-    private static ItemAdapter mySingelton;
+    private static ItemAdapter instance;
     private final Activity activity;
     private ArrayList<Item> items;
 
-
+    // implementation of singleton pattern to make sure that only one instance of adapter is created.
     private ItemAdapter(Activity activity) {
         this.activity = activity;
         items = new ArrayList<>();
-        reload();
+        reloadFiltered();
     }
 
-    static ItemAdapter getSingelton(Activity activity) {
-        if (mySingelton == null) {
-            mySingelton = new ItemAdapter(activity);
+    static ItemAdapter getInstance(Activity activity) {
+        if (instance == null) {
+            instance = new ItemAdapter(activity);
         }
-        return mySingelton;
+        return instance;
     }
 
-    private void reload() {
-        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAll();
-    }
-
+    /**
+     * Reload all items from item DB, that match filters. Call this function after changing data set.
+     */
     void reloadFiltered() {
         ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
         items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_KEEP);
@@ -68,6 +66,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         final TextView itemTitle;
         final TextView itemDescription;
         final ImageView itemPhoto;
+        // reference to currentItem is needed to obtain data like id and pass it to other activities
         Item currentItem;
 
         ItemViewHolder(@NonNull View itemView) {

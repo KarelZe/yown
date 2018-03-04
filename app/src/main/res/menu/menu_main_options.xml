@@ -5,8 +5,4 @@
         android:id="@+id/itemSettings"
         android:title="@string/menu_item_settings"
         design:showAsAction="never" />
-    <item
-        android:id="@+id/itemAddItem"
-        android:title="@string/menu_item_AddItem"
-        design:showAsAction="never" />
 </menu>

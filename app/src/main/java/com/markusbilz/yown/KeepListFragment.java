@@ -24,7 +24,7 @@ public class KeepListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rv_keep);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView.Adapter adapter = ItemAdapter.getSingelton(this.getActivity());
+        RecyclerView.Adapter adapter = ItemAdapter.getInstance(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;
@@ -33,7 +33,7 @@ public class KeepListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ItemAdapter adapter = ItemAdapter.getSingelton(getActivity());
+        ItemAdapter adapter = ItemAdapter.getInstance(getActivity());
         adapter.reloadFiltered();
         recyclerView.setAdapter(adapter);
     }
