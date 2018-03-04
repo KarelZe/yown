@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,15 +47,16 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
         items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_LET_GO);
     }
 
+    @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_item_dispose, parent, false);
         return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = items.get(position);
         holder.setCurrentItem(item);
     }
@@ -71,7 +73,7 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
         final Button itemSell;
         Item currentItem;
 
-        ItemViewHolder(View itemView) {
+        ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_dispose_title);
             itemDescription = itemView.findViewById(R.id.tv_item_dispose_description);
@@ -81,15 +83,15 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
             itemView.setOnClickListener(this);
         }
 
-        public void setCurrentItem(Item currentItem) {
+        void setCurrentItem(@NonNull Item currentItem) {
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
-            itemPhoto.setImageBitmap(BitmapUtility.byte2Bitmap(currentItem.getThumbnail()));
+            itemPhoto.setImageBitmap(BitmapUtility.byteToBitmap(currentItem.getThumbnail()));
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             if (view.getId() == R.id.btn_item_dispose_sell) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ebay.com"));
                 view.getContext().startActivity(intent);

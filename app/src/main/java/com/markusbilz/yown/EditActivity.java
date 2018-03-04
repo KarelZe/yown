@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private ListItemView editImage;
     private ListItemView editNote;
     private ListItemView editCategory;
+    @Nullable
     private Bitmap thumbnail;
 
     @Override
@@ -40,7 +43,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         editTitle.setTitle(item.getTitle());
         editCategory.setTitle(item.getCategory());
         editNote.setTitle(item.getDescription());
-        editImage.getAvatarView().setImageBitmap(BitmapUtility.byte2Bitmap(item.getThumbnail()));
+        editImage.getAvatarView().setImageBitmap(BitmapUtility.byteToBitmap(item.getThumbnail()));
 
         editTitle.setOnClickListener(this);
         editNote.setOnClickListener(this);
@@ -49,13 +52,15 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.title_edit_item);
+            String subtitle = DateUtility.dateTimeUi(item.getDateOfLastUsage());
+            getSupportActionBar().setSubtitle(subtitle);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         }
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         switch (view.getId()) {
             case R.id.lv_edit_title:
@@ -75,7 +80,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void saveItem(View view) {
+    private void saveItem(@NonNull View view) {
         String title = editTitle.getTitle();
         String description = editNote.getTitle();
         String category = editCategory.getTitle();
@@ -84,13 +89,13 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         item.setCategory(category);
         // overwrite thumbnail only if a new image is available
         if (thumbnail != null) {
-            item.setThumbnail(BitmapUtility.bitmap2Byte(thumbnail));
+            item.setThumbnail(BitmapUtility.bitmapToByte(thumbnail));
         }
         ItemDB.getInstance(view.getContext()).update(item);
         finish();
     }
 
-    private void deleteItem(View view) {
+    private void deleteItem(@NonNull View view) {
         ItemDB.getInstance(view.getContext()).delete(item);
         finish();
     }
@@ -105,7 +110,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         dialog.setArguments(bundle);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
@@ -113,8 +118,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         thumbnail = (Bitmap) extras.get("data");
+                        editImage.getAvatarView().setImageBitmap(thumbnail);
                     }
-                    editImage.getAvatarView().setImageBitmap(thumbnail);
                     break;
             }
         }
@@ -143,7 +148,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         View view;
         switch (item.getItemId()) {
             case R.id.action_menu_done:

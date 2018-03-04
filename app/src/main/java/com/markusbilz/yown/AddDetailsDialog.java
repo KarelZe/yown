@@ -17,7 +17,9 @@ public class AddDetailsDialog extends AppCompatDialogFragment {
 
     private EditText etDetails;
     private AddDetailsDialogListener listener;
+    @Nullable
     private String title;
+    @Nullable
     private String hint;
     private int id;
 

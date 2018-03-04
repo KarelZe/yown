@@ -3,6 +3,8 @@ package com.markusbilz.yown;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,7 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         items = (ArrayList<Item>) itemDB.getAll();
     }
 
+    @Nullable
     Item getItem(int id) {
         for (Item item : items) {
             if (item.getId() == id) {
@@ -49,15 +52,16 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         return null;
     }
 
+    @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_item_vote, parent, false);
         return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = items.get(position);
         holder.setCurrentItem(item);
     }
@@ -74,7 +78,7 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         final ImageView itemPhoto;
         Item currentItem;
 
-        ItemViewHolder(View itemView) {
+        ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_vote_title);
             itemDescription = itemView.findViewById(R.id.tv_item_vote_description);
@@ -84,15 +88,15 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
             itemView.setOnClickListener(this);
         }
 
-        public void setCurrentItem(Item currentItem) {
+        public void setCurrentItem(@NonNull Item currentItem) {
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());
-            itemPhoto.setImageBitmap(BitmapUtility.byte2Bitmap(currentItem.getThumbnail()));
+            itemPhoto.setImageBitmap(BitmapUtility.byteToBitmap(currentItem.getThumbnail()));
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(@NonNull View view) {
             //noinspection StatementWithEmptyBody
             if (view.getId() == R.id.iv_item_vote_used) {
                 // Todo: Handle update with database connection

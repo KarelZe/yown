@@ -4,7 +4,7 @@ package com.markusbilz.yown;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 class Item {
     private final int id;
-    private final int isNeeded;
+    private final String uuidNfc;
     private final String dateOfCreation;
     private byte[] thumbnail;
     private String title;
@@ -13,38 +13,48 @@ class Item {
     private String dateOfLastUsage;
     private String category;
 
-    Item(int id, byte[] thumbnail, String title, String description, String category, int isNeeded, String dateOfCreation, String dateOfLastUsage) {
+    /**
+     * @param id              primary key of item in database
+     * @param thumbnail       thumbnail image of item
+     * @param title           title of item
+     * @param description     description of item
+     * @param category        category of item
+     * @param uuidNfc         unique identifier stored on nfc tag
+     * @param dateOfCreation  initial date of creation
+     * @param dateOfLastUsage date of last usage or update
+     */
+    Item(int id, byte[] thumbnail, String title, String description, String category, String uuidNfc, String dateOfCreation, String dateOfLastUsage) {
         this.id = id;
         this.thumbnail = thumbnail;
         this.title = title;
         this.description = description;
         this.category = category;
-        this.isNeeded = isNeeded;
+        this.uuidNfc = uuidNfc;
         this.dateOfCreation = dateOfCreation;
         this.dateOfLastUsage = dateOfLastUsage;
     }
 
-    public byte[] getThumbnail() {
+    byte[] getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(byte[] thumbnail) {
+    void setThumbnail(byte[] thumbnail) {
         this.thumbnail = thumbnail;
     }
 
-    public String getCategory() {
+    String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    void setCategory(String category) {
         this.category = category;
     }
 
-    public String getTitle() {
+    String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    void setTitle(String title) {
         this.title = title;
     }
 
@@ -52,12 +62,15 @@ class Item {
         return description;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
+    public String getDateOfLastUsage() {
+        return dateOfLastUsage;
+    }
 }

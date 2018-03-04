@@ -8,13 +8,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -28,7 +25,7 @@ public class ItemDB {
                     ItemEntry.COLNAME_THUMBNAIL + " BLOB, " +
                     ItemEntry.COLNAME_TITLE + " TEXT, " +
                     ItemEntry.COLNAME_DESCRIPTION + " TEXT," +
-                    ItemEntry.COLNAME_IS_NEEDED + " INTEGER, " +
+                    ItemEntry.COLNAME_UUID_NFC + " TEXT, " +
                     ItemEntry.COLNAME_DATE_OF_CREATION + " TEXT," +
                     ItemEntry.COLNAME_DATE_OF_LAST_USAGE + " TEXT," +
                     ItemEntry.COLNAME_CATEGORY + " TEXT " +
@@ -49,16 +46,17 @@ public class ItemDB {
         return myInstance;
     }
 
+    @NonNull
     public List<Item> getAll() {
 
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getReadableDatabase()) {
             ArrayList<Item> result = new ArrayList<>();
             try (Cursor cursor = db.query(ItemEntry.TABLE_NAME,
-                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
+                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_UUID_NFC, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
                     null, null, null, null, null)) {
                 while (cursor.moveToNext()) {
-                    Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6), cursor.getString(7));
+                    Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
                     result.add(item);
                 }
                 return result;
@@ -66,6 +64,7 @@ public class ItemDB {
         }
     }
 
+    @NonNull
     public List<Item> getAllFiltered(int filterClause)
 
     {
@@ -74,13 +73,11 @@ public class ItemDB {
         try (SQLiteDatabase db = helper.getReadableDatabase()) {
             ArrayList<Item> result = new ArrayList<>();
             String selectionClause = getSelectionClause(filterClause);
-            Log.d("days", selectionClause);
-            //String[] selectionArgs = {String.valueOf(filterClause)};
             try (Cursor cursor = db.query(ItemEntry.TABLE_NAME,
-                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_IS_NEEDED, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
+                    new String[]{ItemEntry.COLNAME_ID, ItemEntry.COLNAME_THUMBNAIL, ItemEntry.COLNAME_TITLE, ItemEntry.COLNAME_DESCRIPTION, ItemEntry.COLNAME_CATEGORY, ItemEntry.COLNAME_UUID_NFC, ItemEntry.COLNAME_DATE_OF_CREATION, ItemEntry.COLNAME_DATE_OF_LAST_USAGE},
                     selectionClause, null, null, null, null)) {
                 while (cursor.moveToNext()) {
-                    Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(4), cursor.getString(5), cursor.getString(6));
+                    Item item = new Item(cursor.getInt(0), cursor.getBlob(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(4), cursor.getString(5), cursor.getString(6));
                     result.add(item);
                 }
                 return result;
@@ -88,26 +85,36 @@ public class ItemDB {
         }
     }
 
-    public void insert(String title, String description, String category, byte[] thumbnail) {
+    public void insert(String title, String description, String category, byte[] thumbnail, String uuidNfc) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getReadableDatabase()) {
-            // generate date in ISO 8601 format, as per sqlite spec
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            String date = sdf.format(new Date());
 
+            String date = DateUtility.nowSql();
             ContentValues values = new ContentValues();
             values.put(ItemEntry.COLNAME_THUMBNAIL, thumbnail);
             values.put(ItemEntry.COLNAME_TITLE, title);
             values.put(ItemEntry.COLNAME_DESCRIPTION, description);
             values.put(ItemEntry.COLNAME_CATEGORY, category);
-            values.put(ItemEntry.COLNAME_IS_NEEDED, true);
+            values.put(ItemEntry.COLNAME_UUID_NFC, uuidNfc);
             values.put(ItemEntry.COLNAME_DATE_OF_CREATION, date);
             values.put(ItemEntry.COLNAME_DATE_OF_LAST_USAGE, date);
             db.insert(ItemEntry.TABLE_NAME, ItemEntry.COLNAME_TITLE, values);
         }
     }
 
-    public void update(Item item) {
+    public void update(String uuid) {
+        ItemDbHelper helper = new ItemDbHelper(context);
+        try (SQLiteDatabase db = helper.getWritableDatabase()) {
+            String date = DateUtility.nowSql();
+            ContentValues values = new ContentValues();
+            values.put(ItemEntry.COLNAME_DATE_OF_LAST_USAGE, date);
+            String selection = ItemEntry.COLNAME_UUID_NFC + " LIKE ?";
+            String[] selectionArgs = {uuid};
+            db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+        }
+    }
+
+    public void update(@NonNull Item item) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -121,7 +128,7 @@ public class ItemDB {
         }
     }
 
-    public void delete(Item item) {
+    public void delete(@NonNull Item item) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getWritableDatabase()) {
             String whereClause = ItemEntry.COLNAME_ID + " = ?";
@@ -168,7 +175,7 @@ public class ItemDB {
         public static final String COLNAME_THUMBNAIL = "thumbnail";
         public static final String COLNAME_TITLE = "title";
         public static final String COLNAME_DESCRIPTION = "description";
-        public static final String COLNAME_IS_NEEDED = "isNeeded";
+        public static final String COLNAME_UUID_NFC = "uuidNfc";
         public static final String COLNAME_DATE_OF_CREATION = "dateOfCreation";
         public static final String COLNAME_DATE_OF_LAST_USAGE = "dateOfLastUsage";
         public static final String COLNAME_CATEGORY = "category";
@@ -184,7 +191,7 @@ public class ItemDB {
         }
 
         @Override
-        public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        public void onCreate(@NonNull SQLiteDatabase sqLiteDatabase) {
             sqLiteDatabase.execSQL(SQL_CREATE_ENTRIES);
         }
 

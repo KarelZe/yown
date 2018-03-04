@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.CompoundButton;
 
-public class SettingsActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class SettingsActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFERENCES = "sharedPreferences";
     public static final String ADVANCED_SORTING = "advancedSorting";
@@ -17,6 +17,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
@@ -26,10 +27,18 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
         loadData();
 
         scAdvancedSorting = findViewById(R.id.sc_advanced_sorting);
-        scAdvancedSorting.setOnCheckedChangeListener(this);
+        scAdvancedSorting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                saveSettings();
+            }
+        });
         scAdvancedSorting.setChecked(advancedSortingState);
     }
 
+    /**
+     * Function to save the state of the switch to Shared Preferences
+     */
     private void saveSettings() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -37,13 +46,11 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
         editor.apply();
     }
 
+    /**
+     * Function to retrieve state of the switch from shared preferences. Default value is false.
+     */
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         advancedSortingState = sharedPreferences.getBoolean(ADVANCED_SORTING, false);
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        saveSettings();
     }
 }
