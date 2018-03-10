@@ -3,17 +3,17 @@ package com.markusbilz.yown;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-public class AddDetailsDialog extends AppCompatDialogFragment {
+public class AddDetailsDialog extends DialogFragment {
 
     private EditText etDetails;
     private AddDetailsDialogListener listener;
@@ -69,7 +69,7 @@ public class AddDetailsDialog extends AppCompatDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (AddDetailsDialogListener) context;
+            listener = (AddDetailsDialogListener) getTargetFragment();
         } catch (Exception e) {
             throw new ClassCastException();
         }

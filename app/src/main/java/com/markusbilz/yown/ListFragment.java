@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 public class ListFragment extends Fragment {
 
-    public static final int RESULT_OK = 200;
+    private static final int RESULT_OK = 200;
     private static final int REQUEST_ADD_ITEM = 1;
     private RecyclerView recyclerView;
 
