@@ -3,6 +3,7 @@ package com.markusbilz.yown;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -28,7 +29,9 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
     private ListItemView editImage;
     private ListItemView editDescription;
     private ListItemView editCategory;
+    private ActionBar actionBar;
     private String uuid;
+    private String subtitle = "";
     @Nullable
     private Bitmap thumbnail;
 
@@ -43,23 +46,17 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         editDescription = view.findViewById(R.id.lv_edit_description);
 
         int id = getActivity().getIntent().getIntExtra("id", 0);
-        item = ItemWithCheckboxAdapter.getInstance(activity).getItem(id);
-        String subtitle = "";
+        LoadItemTask loadItemTask = new LoadItemTask();
+        loadItemTask.execute(id);
+
         uuid = UUID.randomUUID().toString();
-        // item has been edited before.
-        if (item != null) {
-            editTitle.setTitle(item.getTitle());
-            editCategory.setTitle(item.getCategory());
-            editDescription.setTitle(item.getDescription());
-            editImage.getAvatarView().setImageBitmap(BitmapUtility.byteToBitmap(item.getThumbnail()));
-            subtitle = DateUtility.dateTimeUi(item.getDateOfLastUsage());
-        }
+
         editTitle.setOnClickListener(this);
         editDescription.setOnClickListener(this);
         editImage.setOnClickListener(this);
         editCategory.setOnClickListener(this);
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_edit_item);
             actionBar.setSubtitle(subtitle);
@@ -79,10 +76,10 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_menu_done:
-                saveItem(view);
+                saveItem();
                 break;
             case R.id.action_menu_delete:
-                deleteItem(view);
+                deleteItem();
                 break;
         }
         return false;
@@ -152,13 +149,14 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         }
     }
 
-    private void saveItem(@NonNull View view) {
+    private void saveItem() {
         String title = editTitle.getTitle();
         String description = editDescription.getTitle();
         String category = editCategory.getTitle();
 
         if (item == null) {
-            ItemDB.getInstance(view.getContext()).insert(title, description, category, BitmapUtility.bitmapToByte(thumbnail), uuid);
+            InsertItemTask insertItemTask = new InsertItemTask();
+            insertItemTask.execute(title, description, category);
         } else {
             item.setTitle(title);
             item.setDescription(description);
@@ -167,13 +165,76 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             if (thumbnail != null) {
                 item.setThumbnail(BitmapUtility.bitmapToByte(thumbnail));
             }
-            ItemDB.getInstance(view.getContext()).update(item);
+            UpdateItemTask updateItemTask = new UpdateItemTask();
+            updateItemTask.execute();
         }
         activity.finish();
     }
 
-    private void deleteItem(@NonNull View view) {
-        ItemDB.getInstance(view.getContext()).delete(item);
+    private void deleteItem() {
+        DeleteItemTask deleteItemTask = new DeleteItemTask();
+        deleteItemTask.execute();
         activity.finish();
+    }
+
+    private class DeleteItemTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ItemDB.getInstance(view.getContext()).delete(item);
+            return null;
+        }
+    }
+
+    private class UpdateItemTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ItemDB.getInstance(view.getContext()).update(item);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    private class InsertItemTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... itemData) {
+            ItemDB.getInstance(view.getContext()).insert(itemData[0], itemData[1], itemData[2], BitmapUtility.bitmapToByte(thumbnail), uuid);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    private class LoadItemTask extends AsyncTask<Integer, Void, Item> {
+
+        @Override
+        protected Item doInBackground(Integer... integers) {
+            return ItemDB.getInstance(view.getContext()).getItem(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Item itemLoaded) {
+            item = itemLoaded;
+            // item has been edited before.
+            if (item != null) {
+                editTitle.setTitle(item.getTitle());
+                editCategory.setTitle(item.getCategory());
+                editDescription.setTitle(item.getDescription());
+                editImage.getAvatarView().setImageBitmap(BitmapUtility.byteToBitmap(item.getThumbnail()));
+                subtitle = DateUtility.dateTimeUi(item.getDateOfLastUsage());
+            }
+            if (actionBar != null) {
+                actionBar.setSubtitle(subtitle);
+            }
+        }
     }
 }

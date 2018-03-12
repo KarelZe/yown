@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 public class KeepListFragment extends Fragment {
 
@@ -24,17 +27,32 @@ public class KeepListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rv_keep);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView.Adapter adapter = ItemAdapter.getInstance(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        UpdateListTask updateListTask = new UpdateListTask();
+        updateListTask.execute();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ItemAdapter adapter = ItemAdapter.getInstance(getActivity());
-        adapter.reloadFiltered();
-        recyclerView.setAdapter(adapter);
+        UpdateListTask updateListTask = new UpdateListTask();
+        updateListTask.execute();
+    }
+
+    private class UpdateListTask extends AsyncTask<Void, Void, ArrayList<Item>> {
+
+        @Override
+        protected ArrayList<Item> doInBackground(Void... voids) {
+            ItemDB itemDB = ItemDB.getInstance(getContext());
+            return (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_KEEP);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Item> items) {
+            super.onPostExecute(items);
+            ItemAdapter adapter = ItemAdapter.getInstance(items);
+            recyclerView.setAdapter(adapter);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.markusbilz.yown;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,30 +17,20 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
     private static ItemAdapter instance;
-    private final Activity activity;
-    private ArrayList<Item> items;
+    private static ArrayList<Item> items;
 
     // implementation of singleton pattern to make sure that only one instance of adapter is created.
-    private ItemAdapter(Activity activity) {
-        this.activity = activity;
-        items = new ArrayList<>();
-        reloadFiltered();
+    private ItemAdapter() {
     }
 
-    static ItemAdapter getInstance(Activity activity) {
+    static ItemAdapter getInstance(ArrayList<Item> itemList) {
         if (instance == null) {
-            instance = new ItemAdapter(activity);
+            instance = new ItemAdapter();
         }
+        items = itemList;
         return instance;
     }
 
-    /**
-     * Reload all items from item DB, that match filters. Call this function after changing data set.
-     */
-    void reloadFiltered() {
-        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_KEEP);
-    }
 
     @NonNull
     @Override
@@ -69,7 +58,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         // reference to currentItem is needed to obtain data like id and pass it to other activities
         Item currentItem;
 
-        ItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_default_title);
             itemDescription = itemView.findViewById(R.id.tv_item_default_description);
@@ -77,7 +66,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
             itemView.setOnClickListener(this);
         }
 
-        public void setCurrentItem(@NonNull Item currentItem) {
+        void setCurrentItem(@NonNull Item currentItem) {
             this.currentItem = currentItem;
             itemTitle.setText(currentItem.getTitle());
             itemDescription.setText(currentItem.getDescription());

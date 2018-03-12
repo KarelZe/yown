@@ -1,10 +1,8 @@
 package com.markusbilz.yown;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,40 +17,21 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
 
     @SuppressLint("StaticFieldLeak")
     private static ItemWithCheckboxAdapter instance;
-    private final Activity activity;
-    private ArrayList<Item> items;
+    private static ArrayList<Item> items;
 
 
-    private ItemWithCheckboxAdapter(Activity activity) {
-        this.activity = activity;
-        items = new ArrayList<>();
-        reload();
+    private ItemWithCheckboxAdapter() {
     }
 
     // implementation of singleton pattern to make sure that only one instance of adapter is created.
-    static ItemWithCheckboxAdapter getInstance(Activity activity) {
+    static ItemWithCheckboxAdapter getInstance(ArrayList<Item> itemList) {
         if (instance == null) {
-            instance = new ItemWithCheckboxAdapter(activity);
+            instance = new ItemWithCheckboxAdapter();
         }
+        items = itemList;
         return instance;
     }
 
-    void reload() {
-        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAll();
-    }
-
-    @Nullable
-    Item getItem(int id) {
-        // force refresh as items can be updated in db, but not in Array list e.g. last usage
-        reload();
-        for (Item item : items) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
-    }
 
     @NonNull
     @Override
@@ -99,9 +78,11 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
 
         @Override
         public void onClick(@NonNull View view) {
+            //noinspection StatementWithEmptyBody
             if (view.getId() == R.id.iv_item_vote_used) {
-                String uuid = currentItem.getUuidNfc();
-                ItemDB.getInstance(view.getContext()).update(uuid);
+                // Todo: reimplement using AsyncTask
+                //String uuid = currentItem.getUuidNfc();
+                //ItemDB.getInstance(view.getContext()).update(uuid);
             } else {
                 Intent intent = new Intent(view.getContext(), EditActivity.class);
                 intent.putExtra("id", currentItem.getId());

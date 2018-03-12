@@ -1,7 +1,6 @@
 package com.markusbilz.yown;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -20,27 +19,20 @@ class ItemWithButtonAdapter extends RecyclerView.Adapter<ItemWithButtonAdapter.I
 
     @SuppressLint("StaticFieldLeak")
     private static ItemWithButtonAdapter instance;
-    private final Activity activity;
-    private ArrayList<Item> items;
+    private static ArrayList<Item> items;
 
 
-    private ItemWithButtonAdapter(Activity activity) {
-        this.activity = activity;
-        items = new ArrayList<>();
-        reloadFiltered();
+    private ItemWithButtonAdapter() {
     }
 
-    static ItemWithButtonAdapter getInstance(Activity activity) {
+    static ItemWithButtonAdapter getInstance(ArrayList<Item> itemList) {
         if (instance == null) {
-            instance = new ItemWithButtonAdapter(activity);
+            instance = new ItemWithButtonAdapter();
         }
+        items = itemList;
         return instance;
     }
 
-    void reloadFiltered() {
-        ItemDB itemDB = ItemDB.getInstance(activity.getApplicationContext());
-        items = (ArrayList<Item>) itemDB.getAllFiltered(ItemDB.FILTER_LET_GO);
-    }
 
     @NonNull
     @Override

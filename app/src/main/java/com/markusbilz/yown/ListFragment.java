@@ -1,6 +1,7 @@
 package com.markusbilz.yown;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 public class ListFragment extends Fragment {
 
@@ -36,10 +39,9 @@ public class ListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rv_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView.Adapter adapter = ItemWithCheckboxAdapter.getInstance(this.getActivity());
-
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        UpdateListTask updateListTask = new UpdateListTask();
+        updateListTask.execute();
         return view;
     }
 
@@ -49,19 +51,32 @@ public class ListFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && REQUEST_ADD_ITEM == requestCode) {
             // swap adapter and update list with the containing items
-            ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getInstance(getActivity());
-            adapter.reload();
-            recyclerView.setAdapter(adapter);
+            UpdateListTask updateListTask = new UpdateListTask();
+            updateListTask.execute();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // update recyclerView in every onResume
-        ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getInstance(getActivity());
-        adapter.reload();
-        recyclerView.setAdapter(adapter);
-
+        UpdateListTask updateListTask = new UpdateListTask();
+        updateListTask.execute();
     }
+
+    private class UpdateListTask extends AsyncTask<Void, Void, ArrayList<Item>> {
+
+        @Override
+        protected ArrayList<Item> doInBackground(Void... voids) {
+            ItemDB itemDB = ItemDB.getInstance(getContext());
+            return (ArrayList<Item>) itemDB.getAll();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Item> items) {
+            super.onPostExecute(items);
+            ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getInstance(items);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
 }
