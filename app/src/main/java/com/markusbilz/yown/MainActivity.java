@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
+            case R.id.itemHowTo:
+                Intent howToIntent = new Intent(this, HowToActivity.class);
+                startActivity(howToIntent);
+                break;
         }
         return true;
     }

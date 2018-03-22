@@ -5,4 +5,8 @@
         android:id="@+id/itemSettings"
         android:title="@string/menu_item_settings"
         design:showAsAction="never" />
+    <item
+        android:id="@+id/itemHowTo"
+        android:title="@string/menu_item_how_to"
+        design:showAsAction="never" />
 </menu>
