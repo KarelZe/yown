@@ -194,27 +194,27 @@ class ItemDB {
 
         if (filter == FILTER_KEEP) {
             if (advancedSortingState)
-            // item has been used in the last 30 days on rolling basis and has been used before
+            // item has been used in the last 2 days on rolling basis and has been used before
             {
-                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") <= 30" +
-                        " AND " + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + "<>" +
-                        ItemEntry.COLNAME_DATE_OF_CREATION;
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") <= 2" +
+                        " AND " +
+                        ItemEntry.COLNAME_DATE_OF_CREATION + "<>" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE;
             } else
-            // item has been used in the last 30 days on a rolling basis
+            // item has been used in the last 2 days on a rolling basis
             {
-                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ")<= 30";
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ")<= 2";
             }
         } else {
             if (advancedSortingState)
-            // item has been used in the last 30 days on rolling basis and has been used before
+            // item has been used in the last 2 days on rolling basis or has not been used before
             {
-                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 30" +
-                        " AND " + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + "<>" +
-                        ItemEntry.COLNAME_DATE_OF_CREATION;
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 2" +
+                        " OR " +
+                        ItemEntry.COLNAME_DATE_OF_CREATION + "==" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE;
             } else
-            // item has been used in the last 30 days on a rolling basis
+            // item has been used in the last 2 days on a rolling basis
             {
-                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 30";
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") > 2";
             }
         }
 
