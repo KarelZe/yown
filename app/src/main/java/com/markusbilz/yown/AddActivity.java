@@ -17,6 +17,9 @@ public class AddActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
+        // disable delete for add activity
+        MenuItem item = menu.findItem(R.id.action_menu_delete);
+        item.setVisible(false);
         return true;
     }
 
