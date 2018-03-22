@@ -1,17 +1,42 @@
 package com.markusbilz.yown;
+
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.FormatException;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.UUID;
 
 
 public class AddActivity extends AppCompatActivity {
+
+    private static final int REQUEST_NFC = 99;
+    private NfcAdapter nfcAdapter;
+    private String uuid;
+    private boolean isWrite = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        // generate uuid to pair nfc tag with database. Writing the id of the database entry to
+        // the nfc tag is however not possible as it is generated later.
+        uuid = UUID.randomUUID().toString();
     }
 
     @Override
@@ -26,18 +51,12 @@ public class AddActivity extends AppCompatActivity {
     // implementation happens in fragment
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_menu_nfc:
+                isWrite = true;
+                break;
+        }
         return false;
-    }
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
-
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        // generate uuid to pair nfc tag with database. Writing the id of the database entry to
-        // the nfc tag is however not possible as it is generated later.
-        uuid = UUID.randomUUID().toString();
     }
 
     @Override
@@ -48,20 +67,6 @@ public class AddActivity extends AppCompatActivity {
         }
         return super.onPrepareOptionsMenu(menu);
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_menu_done:
-                View view = findViewById(R.id.action_menu_done);
-                saveItem(view);
-                break;
-            case R.id.action_menu_nfc:
-                isWrite = true;
-                break;
-        }
-        return false;
     }
 
     private boolean nfcIsEnabled() {
@@ -142,7 +147,7 @@ public class AddActivity extends AppCompatActivity {
      * @param message Message stored on tag
      * @return String representation of message
      */
-    /*
+
     private String ndefMessageToString(@Nullable NdefMessage message) {
         StringBuilder ret = new StringBuilder();
         if (message == null) {
@@ -163,11 +168,10 @@ public class AddActivity extends AppCompatActivity {
      * @param string initial message for
      * @return NdefMessage containing ndefRecord with string
      */
-    /*
     private NdefMessage stringToNdefMessage(@NonNull String string) {
         NdefRecord ndefRecords[] = {NdefRecord.createMime("text/plain",
                 string.getBytes(Charset.forName("UTF-8"))),
                 NdefRecord.createApplicationRecord("com.markusbilz.yown")};
         return new NdefMessage(ndefRecords);
-    }*/
+    }
 }

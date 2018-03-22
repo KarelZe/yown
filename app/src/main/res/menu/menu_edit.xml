@@ -8,6 +8,12 @@
         android:title="@string/menu_item_delete"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_menu_nfc"
+        android:icon="@drawable/ic_nfc_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/menu_item_nfc"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_menu_done"
         android:icon="@drawable/ic_done_white_24dp"
         android:orderInCategory="100"

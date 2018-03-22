@@ -17,6 +17,8 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
+        MenuItem item = menu.findItem(R.id.action_menu_nfc);
+        item.setVisible(false);
         return true;
     }
 
