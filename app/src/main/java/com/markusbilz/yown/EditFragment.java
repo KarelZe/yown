@@ -1,6 +1,7 @@
 package com.markusbilz.yown;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -34,6 +35,19 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
     private String subtitle = "";
     @Nullable
     private Bitmap thumbnail;
+    private OnUuidListener onUuidListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            onUuidListener = (OnUuidListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnUuidListener");
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +64,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         loadItemTask.execute(id);
 
         uuid = UUID.randomUUID().toString();
-
+        onUuidListener.onUuidSet(uuid);
         editTitle.setOnClickListener(this);
         editDescription.setOnClickListener(this);
         editImage.setOnClickListener(this);
@@ -175,6 +189,11 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         DeleteItemTask deleteItemTask = new DeleteItemTask();
         deleteItemTask.execute();
         activity.finish();
+    }
+
+    // interface to pass data between
+    interface OnUuidListener {
+        void onUuidSet(String data);
     }
 
     private class DeleteItemTask extends AsyncTask<Void, Void, Void> {

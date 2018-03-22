@@ -19,10 +19,9 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.UUID;
 
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements EditFragment.OnUuidListener {
 
     private static final int REQUEST_NFC = 99;
     private NfcAdapter nfcAdapter;
@@ -36,7 +35,6 @@ public class AddActivity extends AppCompatActivity {
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         // generate uuid to pair nfc tag with database. Writing the id of the database entry to
         // the nfc tag is however not possible as it is generated later.
-        uuid = UUID.randomUUID().toString();
     }
 
     @Override
@@ -97,12 +95,8 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
-        super.onNewIntent(intent);
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        if (tag != null && !isWrite) {
-            Ndef ndef = Ndef.get(tag);
-            readFromNfc(ndef);
-        } else if (tag != null) {
+        if (tag != null && isWrite) {
             Ndef ndef = Ndef.get(tag);
             NdefMessage ndefMessage = stringToNdefMessage(uuid);
             writeToNfc(ndef, ndefMessage);
@@ -126,42 +120,6 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
-    private void readFromNfc(@NonNull Ndef ndef) {
-        try {
-            ndef.connect();
-            NdefMessage ndefMessage = ndef.getNdefMessage();
-            String uuidFromTag = ndefMessageToString(ndefMessage);
-            ndef.close();
-            ItemDB.getInstance(this).update(uuidFromTag);
-            Toast.makeText(this, uuidFromTag, Toast.LENGTH_SHORT).show();
-        } catch (@NonNull IOException | FormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Function converts ndefMessage to String by parsing the containing ndef Records.
-     * Each record is pared and embraced with brackets, if Message contains multiple records,
-     * records are separated by comma as following: [record1],[...]
-     *
-     * @param message Message stored on tag
-     * @return String representation of message
-     */
-
-    private String ndefMessageToString(@Nullable NdefMessage message) {
-        StringBuilder ret = new StringBuilder();
-        if (message == null) {
-            ret.append("[]");
-            return ret.toString();
-        }
-        // first record contains uuid, second records contains application record
-        NdefRecord[] records = message.getRecords();
-        NdefRecord record = records[0];
-        byte[] payload = record.getPayload();
-        ret.append(new String(payload));
-        return ret.toString();
-    }
-
     /**
      * Function turns string into NdefMessage that contains plain text ndefRecord.
      *
@@ -173,5 +131,10 @@ public class AddActivity extends AppCompatActivity {
                 string.getBytes(Charset.forName("UTF-8"))),
                 NdefRecord.createApplicationRecord("com.markusbilz.yown")};
         return new NdefMessage(ndefRecords);
+    }
+
+    @Override
+    public void onUuidSet(String uuid) {
+        this.uuid = uuid;
     }
 }

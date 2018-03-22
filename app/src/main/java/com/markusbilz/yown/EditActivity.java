@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity implements EditFragment.OnUuidListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,4 +28,8 @@ public class EditActivity extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    public void onUuidSet(String data) {
+
+    }
 }
