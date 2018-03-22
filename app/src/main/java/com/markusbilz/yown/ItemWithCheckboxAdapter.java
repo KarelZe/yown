@@ -1,7 +1,9 @@
 package com.markusbilz.yown;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -57,10 +59,11 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         final TextView itemDescription;
         final ImageView itemUsed;
         final ImageView itemPhoto;
+        final Context context;
         Item currentItem;
-
         ItemViewHolder(@NonNull View itemView) {
             super(itemView);
+            context = itemView.getContext();
             itemTitle = itemView.findViewById(R.id.tv_item_vote_title);
             itemDescription = itemView.findViewById(R.id.tv_item_vote_description);
             itemUsed = itemView.findViewById(R.id.iv_item_vote_used);
@@ -78,16 +81,30 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
 
         @Override
         public void onClick(@NonNull View view) {
-            //noinspection StatementWithEmptyBody
             if (view.getId() == R.id.iv_item_vote_used) {
-                // Todo: reimplement using AsyncTask
-                //String uuid = currentItem.getUuidNfc();
-                //ItemDB.getInstance(view.getContext()).update(uuid);
+                String uuid = currentItem.getUuidNfc();
+                UpdateItemTask updateItemTask = new UpdateItemTask();
+                updateItemTask.execute(uuid);
             } else {
                 Intent intent = new Intent(view.getContext(), EditActivity.class);
                 intent.putExtra("id", currentItem.getId());
                 view.getContext().startActivity(intent);
             }
         }
+
+        private class UpdateItemTask extends AsyncTask<String, Void, Void> {
+
+            @Override
+            protected Void doInBackground(String... uuid) {
+                ItemDB.getInstance(context).update(uuid[0]);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+            }
+        }
     }
+
 }

@@ -224,6 +224,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         @Override
         protected void onPostExecute(Item itemLoaded) {
             item = itemLoaded;
+
             // item has been edited before.
             if (item != null) {
                 editTitle.setTitle(item.getTitle());
