@@ -14,7 +14,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFERENCES = "sharedPreferences";
     public static final String ADVANCED_SORTING = "advancedSorting";
-    private static final String ENABLE_DEBUGGING = "enableDebugging";
+    public static final String ENABLE_DEBUGGING = "enableDebugging";
     private SwitchCompat scAdvancedSorting;
     private SwitchCompat scEnableDebugging;
     private boolean advancedSortingState;

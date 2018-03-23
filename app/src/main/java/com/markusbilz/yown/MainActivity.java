@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -18,17 +19,22 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
 
     private String uuid;
-
+    private TextView tvDebug;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        tvDebug = findViewById(R.id.tv_debug);
     }
 
 
@@ -101,6 +108,15 @@ public class MainActivity extends AppCompatActivity {
         if (nfcAdapter != null) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
         }
+        // Add in-app console
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SettingsActivity.SHARED_PREFERENCES, MODE_PRIVATE);
+        boolean enableDebug = sharedPreferences.getBoolean(SettingsActivity.ENABLE_DEBUGGING, false);
+        if (enableDebug) {
+            tvDebug.setVisibility(View.VISIBLE);
+            debugApplication();
+        } else {
+            tvDebug.setVisibility(View.INVISIBLE);
+        }
     }
     public void onPause() {
         super.onPause();
@@ -117,6 +133,29 @@ public class MainActivity extends AppCompatActivity {
                 Ndef ndef = Ndef.get(tag);
                 readFromNfc(ndef);
             }
+        }
+    }
+
+    /**
+     * Add in-app debug console.
+     * Implementation adapted from
+     * https://stackoverflow.com/questions/7863841/can-logcat-results-for-log-i-be-viewed-in-our-activity
+     */
+    private void debugApplication() {
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -d");
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+
+            StringBuilder log = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                log.append(line);
+            }
+            tvDebug.setText(log.toString());
+            tvDebug.setMovementMethod(ScrollingMovementMethod.getInstance());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
