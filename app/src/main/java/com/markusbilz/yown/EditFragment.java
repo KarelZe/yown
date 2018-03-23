@@ -244,12 +244,6 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                     BitmapUtility.bitmapToByte(thumbnail), uuid);
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-
-            super.onPostExecute(aVoid);
-        }
     }
 
     @SuppressLint("StaticFieldLeak")

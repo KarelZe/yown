@@ -12,4 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_sorting" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/sc_enable_debugging"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_debugging" />
+
+    <Button
+        android:id="@+id/btn_reset_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_reset_all" />
 </LinearLayout>

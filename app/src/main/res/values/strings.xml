@@ -21,4 +21,6 @@
     <string name="dialog_save">Save</string>
     <string name="menu_item_how_to">How To</string>
     <string name="menu_item_nfc">NFC</string>
+    <string name="title_debugging">Enable debugging</string>
+    <string name="title_reset_all">Reset all data</string>
 </resources>

@@ -184,6 +184,16 @@ class ItemDB {
     }
 
     /**
+     * Remove all item from database
+     */
+    void deleteAll() {
+        ItemDbHelper helper = new ItemDbHelper(context);
+        try (SQLiteDatabase db = helper.getWritableDatabase()) {
+            db.delete(ItemEntry.TABLE_NAME, null, null);
+        }
+    }
+
+    /**
      * Function that generates SQL selection clauses based on chosen Filter
      *
      * @param filter Filter condition
