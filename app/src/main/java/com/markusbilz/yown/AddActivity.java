@@ -33,10 +33,14 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        // generate uuid to pair nfc tag with database. Writing the id of the database entry to
-        // the nfc tag is however not possible as it is generated later.
     }
 
+    /**
+     * Implementation of menu, delete button is disabled for AddActivity
+     *
+     * @param menu menu in action bar
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
@@ -57,6 +61,12 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
         return false;
     }
 
+    /**
+     * Prepare menu for further usage in fragment. Disable Nfc Fragment, if device doesn't support
+     * NFC or if it disabled.
+     * @param menu actionbar menu
+     * @return boolean
+     */
     @Override
     public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem itemNfc = menu.findItem(R.id.action_menu_nfc);
@@ -133,6 +143,10 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
         return new NdefMessage(ndefRecords);
     }
 
+    /**
+     * Callback to pass uuid between Fragment and Activity.
+     * @param uuid unique identifier to map item to nfc
+     */
     @Override
     public void onUuidSet(String uuid) {
         this.uuid = uuid;

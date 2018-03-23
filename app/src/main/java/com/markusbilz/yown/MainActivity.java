@@ -17,7 +17,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +27,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private String uuid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,20 +95,18 @@ public class MainActivity extends AppCompatActivity {
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                 0);
 
-        // or to only catch text/plain NDEF records (as you currently do in your manifest):
-        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        try {
-            ndef.addDataType("text/plain");
-        } catch (IntentFilter.MalformedMimeTypeException e) {
-            Log.e("MainActivity", e.getMessage());
-        }
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, new IntentFilter[]{ndef}, null);
-    }
+        IntentFilter[] filters = new IntentFilter[]{};
 
+        if (nfcAdapter != null) {
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
+        }
+    }
     public void onPause() {
         super.onPause();
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        nfcAdapter.disableForegroundDispatch(this);
+        if (nfcAdapter != null) {
+            nfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     public void onNewIntent(Intent intent) {
@@ -121,7 +119,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Read uuid from ndef message. Try to update usage using Update Item Task.
+     *
+     * @param ndef Content of Ndef tag
+     */
     private void readFromNfc(@NonNull Ndef ndef) {
         try {
             ndef.connect();
@@ -138,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Function converts ndefMessage to String by parsing the containing ndef Records.
-     * Each record is pared and embraced with brackets, if Message contains multiple records,
-     * records are separated by comma as following: [record1],[...]
-     *
+     * Each record is pared, if Message contains multiple records,
+     * only the first record is being read.
      * @param message Message stored on tag
      * @return String representation of message
      */

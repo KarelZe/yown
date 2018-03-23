@@ -21,8 +21,10 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="www.markusbilz.com"
                     android:pathPrefix="/yown"
@@ -40,7 +42,7 @@
         </activity>
         <activity
             android:name=".AddActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".EditActivity"
             android:parentActivityName=".EditActivity" />

@@ -14,6 +14,12 @@ public class EditActivity extends AppCompatActivity implements EditFragment.OnUu
         setContentView(R.layout.activity_edit);
     }
 
+    /**
+     * Implementation of menu, nfc button is disabled for EditActivity
+     *
+     * @param menu menu in actionbar
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
@@ -28,8 +34,12 @@ public class EditActivity extends AppCompatActivity implements EditFragment.OnUu
         return false;
     }
 
+    /**
+     * Callback to pass uuid between Fragment and Activity.
+     * @param uuid unique identifier to map item to nfc tag
+     */
     @Override
-    public void onUuidSet(String data) {
+    public void onUuidSet(String uuid) {
 
     }
 }

@@ -7,13 +7,9 @@ import java.util.Date;
 import java.util.Locale;
 
 class DateUtility {
-    // formatting according to  https://www.sqlite.org/lang_datefunc.html
+    // formatting according to https://www.sqlite.org/lang_datefunc.html
     private final static SimpleDateFormat datetimeSql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-    @SuppressWarnings("unused")
-    private final static SimpleDateFormat dateUi = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
     private final static SimpleDateFormat timeUi = new SimpleDateFormat("HH:mm", Locale.US);
-    @SuppressWarnings("unused")
-    private final static SimpleDateFormat datetimeUi = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
 
     /**
      * Function returns current date time as a string in date time format that is used with sqlite

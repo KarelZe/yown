@@ -61,6 +61,7 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
         final ImageView itemPhoto;
         final Context context;
         Item currentItem;
+
         ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             context = itemView.getContext();

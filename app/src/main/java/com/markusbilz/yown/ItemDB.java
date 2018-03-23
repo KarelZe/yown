@@ -63,6 +63,7 @@ class ItemDB {
             }
         }
     }
+
     /**
      * Function to get all items from database. If no entries are found, it returns empty array list.
      *
@@ -93,8 +94,7 @@ class ItemDB {
      * @return List with all items
      */
     @NonNull
-    List<Item> getAllFiltered(int filterClause)
-    {
+    List<Item> getAllFiltered(int filterClause) {
 
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getReadableDatabase()) {
@@ -185,6 +185,7 @@ class ItemDB {
 
     /**
      * Function that generates SQL selection clauses based on chosen Filter
+     *
      * @param filter Filter condition
      * @return SQL selection clause as string
      */

@@ -121,6 +121,13 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         }
     }
 
+    /**
+     * Open dialog to edit fields e. g. title, description
+     *
+     * @param title title in actionbar
+     * @param hint  hint in EditText field
+     * @param id    id of calling ui element
+     */
     private void openDialog(String title, String hint, int id) {
         AddDetailsDialog dialog = new AddDetailsDialog();
         dialog.setTargetFragment(this, 1);
@@ -130,6 +137,26 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         bundle.putString("hint", hint);
         bundle.putInt("id", id);
         dialog.setArguments(bundle);
+    }
+
+    /**
+     * Callback to receive data from dialog.
+     * @param details data being edited
+     * @param id id of calling ui element
+     */
+    @Override
+    public void getDetails(String details, int id) {
+        switch (id) {
+            case R.id.lv_edit_title:
+                editTitle.setTitle(details);
+                break;
+            case R.id.lv_edit_category:
+                editCategory.setTitle(details);
+                break;
+            case R.id.lv_edit_description:
+                editDescription.setTitle(details);
+                break;
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
@@ -144,22 +171,6 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                     }
                     break;
             }
-        }
-    }
-
-    @Override
-    public void getDetails(String details, int id) {
-        switch (id) {
-            case R.id.lv_edit_title:
-                editTitle.setTitle(details);
-                break;
-            case R.id.lv_edit_category:
-                editCategory.setTitle(details);
-                break;
-            case R.id.lv_edit_description:
-                editDescription.setTitle(details);
-                break;
-
         }
     }
 
@@ -185,15 +196,18 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         activity.finish();
     }
 
+
     private void deleteItem() {
         DeleteItemTask deleteItemTask = new DeleteItemTask();
         deleteItemTask.execute();
         activity.finish();
     }
 
-    // interface to pass data between
+    /**
+     * Callback to pass data between Fragment and Activity
+     */
     interface OnUuidListener {
-        void onUuidSet(String data);
+        void onUuidSet(String uuid);
     }
 
     private class DeleteItemTask extends AsyncTask<Void, Void, Void> {
@@ -222,7 +236,8 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
 
         @Override
         protected Void doInBackground(String... itemData) {
-            ItemDB.getInstance(view.getContext()).insert(itemData[0], itemData[1], itemData[2], BitmapUtility.bitmapToByte(thumbnail), uuid);
+            ItemDB.getInstance(view.getContext()).insert(itemData[0], itemData[1], itemData[2],
+                    BitmapUtility.bitmapToByte(thumbnail), uuid);
             return null;
         }
 
