@@ -15,5 +15,8 @@ This app is my coursework for ```CMP 309``` at Abertay University, Scotland.
 - [x] Refactor DB calls to Asynchronous Task
 - [ ] Code review
 - [x] Add how to Activity using web view and custom HTML
+- [ ] Better user feedback on NFC
+- [ ] Enhance Settings Activity with debug console
+- [ ] Enhance Settings Activity with reset all functionality
 ## Contact
 Feel free to send me a  [mail](mailto:1705042@abertay.ac.uk)

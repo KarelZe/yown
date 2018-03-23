@@ -37,7 +37,6 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Implementation of menu, delete button is disabled for AddActivity
-     *
      * @param menu menu in action bar
      * @return boolean
      */
@@ -114,6 +113,12 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     }
 
+    /**
+     * Function to write NdefMessage to nfc tag
+     *
+     * @param ndef        Ndef to connect to
+     * @param ndefMessage NdefMessage to be written to nfc tag
+     */
     private void writeToNfc(@Nullable Ndef ndef, NdefMessage ndefMessage) {
         if (ndef != null) {
             try {
@@ -132,7 +137,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Function turns string into NdefMessage that contains plain text ndefRecord.
-     * @param string initial message for
+     * @param string initial message for writing to ndef message
      * @return NdefMessage containing ndefRecord with string
      */
     private NdefMessage stringToNdefMessage(@NonNull String string) {
