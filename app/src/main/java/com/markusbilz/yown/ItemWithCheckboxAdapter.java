@@ -93,6 +93,7 @@ class ItemWithCheckboxAdapter extends RecyclerView.Adapter<ItemWithCheckboxAdapt
             }
         }
 
+        @SuppressLint("StaticFieldLeak")
         private class UpdateItemTask extends AsyncTask<String, Void, Void> {
 
             @Override

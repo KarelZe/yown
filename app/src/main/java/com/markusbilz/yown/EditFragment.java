@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -210,6 +211,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         void onUuidSet(String uuid);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DeleteItemTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
@@ -218,6 +220,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateItemTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -232,6 +235,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class InsertItemTask extends AsyncTask<String, Void, Void> {
 
         @Override
@@ -248,6 +252,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class LoadItemTask extends AsyncTask<Integer, Void, Item> {
 
         @Override

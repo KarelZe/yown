@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,6 +40,7 @@ public class DisposeListFragment extends Fragment {
         updateListTask.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateListTask extends AsyncTask<Void, Void, ArrayList<Item>> {
 
         @Override

@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         return ret.toString();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateItemTask extends AsyncTask<Void, Void, Void> {
 
         @Override

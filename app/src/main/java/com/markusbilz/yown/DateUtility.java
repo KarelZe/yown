@@ -37,6 +37,7 @@ class DateUtility {
         try {
             prevDate = datetimeSql.parse(dateTime);
             time = timeUi.format(prevDate);
+            // Todo: rethink time delta calculation
             timeDelta = (today.getTime() - prevDate.getTime()) / (86400000);
         } catch (ParseException e) {
             return dateTime;

@@ -132,7 +132,6 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Function turns string into NdefMessage that contains plain text ndefRecord.
-     *
      * @param string initial message for
      * @return NdefMessage containing ndefRecord with string
      */

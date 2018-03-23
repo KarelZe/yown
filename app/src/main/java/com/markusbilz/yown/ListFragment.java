@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +32,6 @@ public class ListFragment extends Fragment {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(getActivity(), AddActivity.class);
                 startActivityForResult(intent, REQUEST_ADD_ITEM);
             }
@@ -63,6 +63,7 @@ public class ListFragment extends Fragment {
         updateListTask.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateListTask extends AsyncTask<Void, Void, ArrayList<Item>> {
 
         @Override

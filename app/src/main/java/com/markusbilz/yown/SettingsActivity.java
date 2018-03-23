@@ -47,7 +47,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Function to retrieve state of the switch from shared preferences. Default value is false.
+     * Function to retrieve state of the switch from shared preferences. Advanced Sorting is
+     * disabled by default.
      */
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
