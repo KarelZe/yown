@@ -3,6 +3,7 @@ package com.markusbilz.yown;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -33,21 +34,29 @@ class DateUtility {
         Date today = new Date();
         Date prevDate;
         String time;
+
+        // calculate milliseconds of current day
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        long msOfCurrentDay = today.getTime() - c.getTimeInMillis();
+        // calculate time delta between prev date and today
         long timeDelta;
         try {
             prevDate = datetimeSql.parse(dateTime);
             time = timeUi.format(prevDate);
-            // Todo: rethink time delta calculation
-            timeDelta = (today.getTime() - prevDate.getTime()) / (86400000);
+            timeDelta = (today.getTime() - prevDate.getTime());
         } catch (ParseException e) {
             return dateTime;
         }
-        if (timeDelta == 0) {
+        if (timeDelta <= msOfCurrentDay) {
             return "today at " + time;
-        } else if (timeDelta == 1) {
-            return "yesterday at" + time;
+        } else if (timeDelta <= msOfCurrentDay + 86_400_000) {
+            return "yesterday at " + time;
         } else {
-            return timeDelta + " days ago";
+            return (timeDelta / 86400000) + " days ago";
         }
     }
 }
