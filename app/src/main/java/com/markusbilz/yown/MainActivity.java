@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String uuid;
     private TextView tvDebug;
+    private FrameLayout flContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         tvDebug = findViewById(R.id.tv_debug);
+        flContent = findViewById(R.id.fl_content);
     }
 
 
@@ -111,13 +115,19 @@ public class MainActivity extends AppCompatActivity {
         // Add in-app console
         SharedPreferences sharedPreferences = this.getSharedPreferences(SettingsActivity.SHARED_PREFERENCES, MODE_PRIVATE);
         boolean enableDebug = sharedPreferences.getBoolean(SettingsActivity.ENABLE_DEBUGGING, false);
+        // swap anchor for align layout above programmatically
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) flContent.getLayoutParams();
         if (enableDebug) {
+            params.addRule(RelativeLayout.ABOVE, R.id.tv_debug);
             tvDebug.setVisibility(View.VISIBLE);
+            flContent.setLayoutParams(params);
             debugApplication();
         } else {
+            params.addRule(RelativeLayout.ABOVE, R.id.bnv_navigator);
             tvDebug.setVisibility(View.INVISIBLE);
         }
     }
+
     public void onPause() {
         super.onPause();
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -182,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
      * Function converts ndefMessage to String by parsing the containing ndef Records.
      * Each record is pared, if Message contains multiple records,
      * only the first record is being read.
+     *
      * @param message Message stored on tag
      * @return String representation of message
      */

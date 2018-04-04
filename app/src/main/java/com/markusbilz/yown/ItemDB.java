@@ -243,7 +243,7 @@ class ItemDB {
         static final String COLNAME_CATEGORY = "category";
     }
 
-    public class ItemDbHelper extends SQLiteOpenHelper {
+    class ItemDbHelper extends SQLiteOpenHelper {
 
         static final int DATABASE_VERSION = 1;
         static final String DATABASE_NAME = "Item.db";

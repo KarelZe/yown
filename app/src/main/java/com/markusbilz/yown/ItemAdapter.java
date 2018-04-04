@@ -58,7 +58,7 @@ class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
         // reference to currentItem is needed to obtain data like id and pass it to other activities
         Item currentItem;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             itemTitle = itemView.findViewById(R.id.tv_item_default_title);
             itemDescription = itemView.findViewById(R.id.tv_item_default_description);
