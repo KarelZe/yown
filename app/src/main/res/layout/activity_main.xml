@@ -10,7 +10,7 @@
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bnv_navigator"
+        android:layout_above="@+id/tv_debug"
         android:layout_gravity="top"
         android:scrollbars="vertical" />
 
@@ -33,5 +33,6 @@
         android:padding="5dp"
         android:scrollbars="vertical"
         android:textColor="@color/colorWhite"
+        android:gravity="bottom"
         android:visibility="invisible" />
 </RelativeLayout>
