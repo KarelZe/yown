@@ -84,11 +84,13 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     @Override
     protected void onResume() {
         super.onResume();
+        // make sure that if e. g. NFC is enabled while Activity is active, menu is redrawn
+        invalidateOptionsMenu();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_NFC,
                 new Intent(this, AddActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                 0);
         IntentFilter[] filters = new IntentFilter[]{};
-        if (nfcAdapter != null) {
+        if (nfcAdapter != null && nfcAdapter.isEnabled()) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
         } else {
             Toast.makeText(this, "NFC is disabled.", Toast.LENGTH_SHORT).show();

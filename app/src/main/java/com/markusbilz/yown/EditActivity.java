@@ -36,6 +36,7 @@ public class EditActivity extends AppCompatActivity implements EditFragment.OnUu
 
     /**
      * Callback to pass uuid between Fragment and Activity.
+     *
      * @param uuid unique identifier to map item to nfc tag
      */
     @Override
