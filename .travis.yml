@@ -48,10 +48,10 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key:
+  on:
+    branch: master
+api_key:
     secure: QRvJ6jopoufbBJ71aL0zNPQ8XMyujx2WAw4WXwOsVzONPcqaLSrEKrTEYwfspMecozt4JNOV4BI//9c+Ar7wkneEh2Ag95u0VvDK/4J7a/4IPnDV1+OYDcolx/iZp269L4Yk/2lvyMqM2kZJWr0/0GLG41bl3TTeym7HKb8GLeKIYtBF3d1yTzFnbszdPw9g+7ultKgXYRcG4uA5whPrq0iD2DdxF6vwAH7WWKiniXT7bmb5op/weVQqe3cXx0oYH+DHrRWujhMd1ohfMZISY4jq+NK44dKL5tzBBWzGBiTZrPdacPBBxC67EjDq7ZFPdV4I8uMdA5nfVqTgKwMPVNUl5FgR42Vf2AeufNFkdzoRtRpXUNIVRI9l+ah42AixVlvV5apHC3MfWo9slXncbaL/A62eKVHntwue+EJAL9whHqRN3x/742Ens5DQ/wFSeaXRTsNY5xd5dLNNWS10JMnix8aevdC5DZNfGyV//Hlnas8cLlwMtX+ucJ90RiYj7fvejLQOtyDutGZFHCwg+z485OtUkdxiPFM6BwWFizMtsuDgoGcAQkz09WkVZaoxHpnqlTB7k6VYcQGKFtOJUqpvXq7lErulh1wxHQxnybz4l3G82wguaWoWtU4xHzqnMzB/haB4ADOdNByP4BSEgz7V/SD0DQXqFYEjPNZbdv0=
-  file: app/build/outputs/apk/release/TravisAndroid.apk
- on:
-    skip_cleanup: true
-    repo: KarelZe/yown
-    tags: true
+   file: "app/build/outputs/apk/release/TravisAndroid.apk"
+   overwrite: true
+ skip_cleanup: true
