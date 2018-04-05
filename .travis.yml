@@ -33,7 +33,7 @@ before_script:
 - chmod +x gradlew
 - chmod +x scripts/tag.sh
 script:
-- "./gradlew clean build assembleRelease"
+- "./gradlew build assembleRelease"
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_747074ef15ef_key -iv $encrypted_747074ef15ef_iv
   -in keystore.jks.enc -out keystore.jks -d
