@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/KarelZe/yown.svg?branch=master)](https://travis-ci.org/KarelZe/yown)
 # Yown
 yown (short for you own) is an android app to help you declutter and keep track of your inventory. It features NFC functionality for easy tracking of usage. It can suggest you, what to keep and what to let go.
 
