@@ -45,14 +45,10 @@ before_deploy:
   TravisAndroid.apk"
 - cd -
 - scripts/tag.sh
-
 deploy:
   provider: releases
   api_key:
-    secure: ElzAtWe+NucGgLATNsNw2+PpUCnSN0alJiIUySkeWDkOhMSASNCpz5TSJdnhTcalTnl60f7QfjZvXCKFyHTsqLyNq2/+GJ0iO/VesuLHmUiF+eWhCIeudkPGRzNXA7+38qrmHwBGDmBB0gqOzkxN6Xz7DhiMKTCV8FZEhNyHOkiHEkkcI7NQHTP7bJR+IH83xGG/vqUKnOgTYPcqENprNkTSu+I49PStY/c73/Ne9CieNPqXn9OPIVvWV0MXSWNhD1qC0sZ0eE5jWWvx2E26CtIJzjNoD5mG8IaTORnRX4ilP/qGw4hF1ZsUi/wpjms2eevwMWYpJzBwlvZZQl4Zhq2dUbmC1coAXFSAEFWwDzlYIy0qCnIIUqyyvXlAFwzWRj7SEdmb6hWN3POGfbe0y7l6tyAYtQvI9HwYuQqXu0RRPfy1PHNB/6Dc2tMxyUqDuqMevfPzvETQv693Mc0xaJ1NPzzZ6mgjs+tRB67Fe9VFRqByb+V8Uii67qYB+Cm8mL7j+FXZxbkfHh685S1k/zpf4CrNe/roDgGo2P70VxktOOU8izlCN5b3tzgiZz/EmrJ+W7vkxTrvlJG5vYnr7bShfb60/zp+c5PRLiGu8MShNwiIr+CyIJJRej+da8P6oks60d2tDm8oSkjLuIiiqLZnTxdtHtBSFuM5/oWCPso=
-  file: "app/build/outputs/apk/release/TravisAndroid.apk"
-  on:
-    repo: KarelZe/yown
-  skip_cleanup: true
-  on:
-    tags: true
+    secure: QRvJ6jopoufbBJ71aL0zNPQ8XMyujx2WAw4WXwOsVzONPcqaLSrEKrTEYwfspMecozt4JNOV4BI//9c+Ar7wkneEh2Ag95u0VvDK/4J7a/4IPnDV1+OYDcolx/iZp269L4Yk/2lvyMqM2kZJWr0/0GLG41bl3TTeym7HKb8GLeKIYtBF3d1yTzFnbszdPw9g+7ultKgXYRcG4uA5whPrq0iD2DdxF6vwAH7WWKiniXT7bmb5op/weVQqe3cXx0oYH+DHrRWujhMd1ohfMZISY4jq+NK44dKL5tzBBWzGBiTZrPdacPBBxC67EjDq7ZFPdV4I8uMdA5nfVqTgKwMPVNUl5FgR42Vf2AeufNFkdzoRtRpXUNIVRI9l+ah42AixVlvV5apHC3MfWo9slXncbaL/A62eKVHntwue+EJAL9whHqRN3x/742Ens5DQ/wFSeaXRTsNY5xd5dLNNWS10JMnix8aevdC5DZNfGyV//Hlnas8cLlwMtX+ucJ90RiYj7fvejLQOtyDutGZFHCwg+z485OtUkdxiPFM6BwWFizMtsuDgoGcAQkz09WkVZaoxHpnqlTB7k6VYcQGKFtOJUqpvXq7lErulh1wxHQxnybz4l3G82wguaWoWtU4xHzqnMzB/haB4ADOdNByP4BSEgz7V/SD0DQXqFYEjPNZbdv0=
+  file: 'app/build/outputs/apk/release/TravisAndroid.apk'
+overwrite: true
+skip_cleanup: true
