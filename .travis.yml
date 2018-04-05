@@ -11,17 +11,25 @@ cache:
   - "$HOME/.android/build-cache"
 env:
   global:
-  - ANDROID_API=26
-  - ANDROID_BUILD_TOOLS=26.0.2
-  - ADB_INSTALL_TIMEOUT=5
+  - ANDROID_API=27
+  - ANDROID_BUILD_TOOLS=26.1.1
+  - ADB_INSTALL_TIMEOUT=10
   - secure: aY46HDAlJ6tKalm2Z6FGm3QPrn1qxzVG/a0jIsR5f5dPHHTaC1wS87dbJsUUF8uGhqmIuVWtkLPsgYvK92XnOnhex/tHmWRusk5BRxpQK9maJXbU5WqK83WkWIN9v82+M1n5+8GA9BSNpHE5XEpmPmzquud8OXRCw19nYi1VA1iO+clkWiXdxKj2dLHFDxuFVWUBLBhFEen4LJl1pktwd5rceWt4S9LyixScnHTfzzDKZo1bi+CPFngqhyL5On8LJDeFb8/3tYWPpht7LCoJ0G/ZCHcdS37wbYUp7U6XiPH9cnzp2VOU1qDJbsTZPvi8nYRgfCfnWQcXNCUrbIQqbPpW41rn0biFnTCYuXyeQFDRoQt+dnZRjY1geUL6RF+lMS0wElNZzRaMivuO9UwVmaozL/nPSq2qvA8S2xrRS+ThtT2dTKA01KbZqDqwFKStYxgqoi1tZugvXzJNpPNzVeKlV1axgrmnDurMlaZyxqnr9A94OuLctkRkrlpd1VgkL0jSZ5I/OZflQLmfsG+f0VQZgjtXeQ3PvXGVW3slrTWrr33lwSFSSLg/rEQTLOGNzmADK9EqZAuel1sRQNZHCunl6XbbJKvuRxj0hR+j/oDk6qI1WgbhusT2GRXZIjJStd3VbwnpV1gND2VMnNmMx0tC/BIWnmYibOmD2y6yCLo=
   - secure: FnLuynt/lzUrML/+6HymrjXEviQuN0b54XwS5+a6qnd50vCcc5gQbB/5ZZBvvDBb6pqu3M/nn9y15Hm07w57vVBojBPW97uN3uPzFd/7TfGouAPum0yQFX+i/AfIL8gulMcp5IDXHBBEPorhQ719s7rvztYuo0Q48p6WVZjm6aprdtxvFtqOtyXJ4fjfQsZKS999jRDpawN8x5yV0rb5ZgxsTmLcZMC4tt+5r/xl90ISptGvwihyQUKEqLt90SCb9wqZCZcnfrRNC2yfdLWYRvjQt9DPjg1ckq66mdqSsMZW2cKzzuOas1rfjSmmA8XtFdG9KJYfcTiUuXi5qm2k1VLhivQMWITp8YEF4HnMg5Fre5xLbmeOIGmXrerp0Sxd+RXPnXmP7wy5g/AfnRFslE4S6+r3rqYEhQDW3x3MHNSWEnbH7pagX5gjfclwz8DmqpTpBMbjDRxse3RrOhiN/6c7lfXUodNeobqrETFvEiOCgyxRcraljbDToT0Ft/NNjk/ZtO+ww5aYXNoPeqyKPu+P8WDikOLbJRH+4ce9uJ9vuMpn/rWkwxagLUhmZKhYWzJ+lG7ArG84JB5JsJf1g4iiIz2DMi6L780rAKJvYzlZxOlfIJA+PTCpP8XFSMYqnW/S/p2BGKkq/7bFvb8H62fQ+OPG7RyyL05mZDKLHzo=
   - secure: THffcyTATxCglHjMWg9raOv2RxRr9ylVOiFOSsx3pXqVAUMkawq9D4PrRRDR6KJwzsf0FDRIRRZ30nUFX4OVpY25vuOYZMlqu68ZRUi8xajBe5Ire9R3ttqqS5n1XHVydt9YbUj5CaKCfFVnbjsriU8vvvwW91TLCNkHuoGjI+bnW3AuyACUyxoNweAna250tDJXWWoNmOXXNJi7G7K6UrvOCYHiv5S2dew3MUeIMRS72dWdd92fTeDWqLA/IpbRsG5tlgCF2lw/CWt+uBpjJNY4NBYYtw17dc5AuFRQoVOuicLVPlgNjiLBm0s7av6SDSewtJ7lH7w/Ilv49gS3zj2YTFtj5bynDsNKm+jQISuC+n5RcroGq5IJ32p+Bkrt1Qzq9NqQmP8RorFupNCq7MOaV9ZMHK1wsYllSmwCl8u3PNpDBIZOFpBVmgIyRGAXXmBpZGM3jhtCsBc1ao4r8ngqYID0sPL/scIjdm+/uILdkjnSYBi9C3sV7vZ2g6KWww6Rb86fvH4/eIMv6/cSas/Ni0CsTO6TJILiaXF1YzdVtfxA6+N5jGD10XorFNL0rv6YwLGTRLPaRehInapgGCMrn/aW5hPScTR3KnXewfIAx9CuFczXRdRLtgj8XpggJmhYAF6wHKQ1NFwy/RgomepenAfIYNy76I/g9hawyCU=
+
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-preview-license'
+  - 'android-sdk-license-.+'
+  - 'android-sdk-license'
+  - 'google-gdk-license-.+'
+
 android:
   components:
   - tools
-  - tools
   - platform-tools
+  - tools
   - android-${ANDROID_API}
   - build-tools-${ANDROID_BUILD_TOOLS}
   - extra
