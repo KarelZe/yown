@@ -24,7 +24,7 @@ licenses:
   - 'android-sdk-license-.+'
   - 'android-sdk-license'
   - 'google-gdk-license-.+'
-
+  - '.+'
 android:
   components:
   - tools
@@ -33,6 +33,7 @@ android:
   - android-${ANDROID_API}
   - build-tools-${ANDROID_BUILD_TOOLS}
   - extra
+  
 before_script:
 - chmod +x gradlew
 script:
