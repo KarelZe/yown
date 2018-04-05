@@ -11,7 +11,7 @@ cache:
   - "$HOME/.android/build-cache"
 env:
   global:
-  - ANDROID_API=27
+  - ANDROID_API=26
   - ANDROID_BUILD_TOOLS=27.0.3
   - ADB_INSTALL_TIMEOUT=10
   - secure: aY46HDAlJ6tKalm2Z6FGm3QPrn1qxzVG/a0jIsR5f5dPHHTaC1wS87dbJsUUF8uGhqmIuVWtkLPsgYvK92XnOnhex/tHmWRusk5BRxpQK9maJXbU5WqK83WkWIN9v82+M1n5+8GA9BSNpHE5XEpmPmzquud8OXRCw19nYi1VA1iO+clkWiXdxKj2dLHFDxuFVWUBLBhFEen4LJl1pktwd5rceWt4S9LyixScnHTfzzDKZo1bi+CPFngqhyL5On8LJDeFb8/3tYWPpht7LCoJ0G/ZCHcdS37wbYUp7U6XiPH9cnzp2VOU1qDJbsTZPvi8nYRgfCfnWQcXNCUrbIQqbPpW41rn0biFnTCYuXyeQFDRoQt+dnZRjY1geUL6RF+lMS0wElNZzRaMivuO9UwVmaozL/nPSq2qvA8S2xrRS+ThtT2dTKA01KbZqDqwFKStYxgqoi1tZugvXzJNpPNzVeKlV1axgrmnDurMlaZyxqnr9A94OuLctkRkrlpd1VgkL0jSZ5I/OZflQLmfsG+f0VQZgjtXeQ3PvXGVW3slrTWrr33lwSFSSLg/rEQTLOGNzmADK9EqZAuel1sRQNZHCunl6XbbJKvuRxj0hR+j/oDk6qI1WgbhusT2GRXZIjJStd3VbwnpV1gND2VMnNmMx0tC/BIWnmYibOmD2y6yCLo=
@@ -31,7 +31,7 @@ android:
   - extra
 
 before_install:
-    - yes | sdkmanager "platforms;android-27"
+    - yes | sdkmanager "platforms;android-26"
 
 before_script:
 - chmod +x gradlew
