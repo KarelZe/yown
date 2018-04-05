@@ -37,6 +37,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Implementation of menu, delete button is disabled for AddActivity
+     *
      * @param menu menu in action bar
      * @return boolean
      */
@@ -54,7 +55,8 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_menu_nfc:
-                isWrite = true;
+                isWrite = !isWrite;
+                Toast.makeText(this, isWrite ? "Writing is enabled." : "Writing is disabled.", Toast.LENGTH_SHORT).show();
                 break;
         }
         return false;
@@ -63,6 +65,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     /**
      * Prepare menu for further usage in fragment. Disable Nfc Fragment, if device doesn't support
      * NFC or if it disabled.
+     *
      * @param menu actionbar menu
      * @return boolean
      */
@@ -119,6 +122,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Function to write NdefMessage to nfc tag
+     *
      * @param ndef        Ndef to connect to
      * @param ndefMessage NdefMessage to be written to nfc tag
      */
@@ -140,6 +144,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Function turns string into NdefMessage that contains plain text ndefRecord.
+     *
      * @param string initial message for writing to ndef message
      * @return NdefMessage containing ndefRecord with string
      */
@@ -152,6 +157,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
 
     /**
      * Callback to pass uuid between Fragment and Activity.
+     *
      * @param uuid unique identifier to map item to nfc
      */
     @Override

@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private String uuid;
     private TextView tvDebug;
     private FrameLayout flContent;
+    private PendingIntent pendingIntent;
+    private IntentFilter[] filters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         });
         tvDebug = findViewById(R.id.tv_debug);
         flContent = findViewById(R.id.fl_content);
+
+        pendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                0);
+        filters = new IntentFilter[]{};
     }
 
 
@@ -103,11 +110,6 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
-                0);
-
-        IntentFilter[] filters = new IntentFilter[]{};
 
         if (nfcAdapter != null) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
@@ -136,8 +138,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // see https://developer.android.com/guide/topics/connectivity/nfc/nfc.html#filtering-intents
     public void onNewIntent(Intent intent) {
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+        if (intent != null && NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             if (tag != null) {
                 Ndef ndef = Ndef.get(tag);
