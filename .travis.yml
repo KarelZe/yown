@@ -1,0 +1,53 @@
+sudo: required
+language: android
+jdk: oraclejdk8
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+  - "$HOME/.android/build-cache"
+env:
+  global:
+  - ANDROID_API=26
+  - ANDROID_BUILD_TOOLS=26.0.2
+  - ADB_INSTALL_TIMEOUT=5
+  - secure: aY46HDAlJ6tKalm2Z6FGm3QPrn1qxzVG/a0jIsR5f5dPHHTaC1wS87dbJsUUF8uGhqmIuVWtkLPsgYvK92XnOnhex/tHmWRusk5BRxpQK9maJXbU5WqK83WkWIN9v82+M1n5+8GA9BSNpHE5XEpmPmzquud8OXRCw19nYi1VA1iO+clkWiXdxKj2dLHFDxuFVWUBLBhFEen4LJl1pktwd5rceWt4S9LyixScnHTfzzDKZo1bi+CPFngqhyL5On8LJDeFb8/3tYWPpht7LCoJ0G/ZCHcdS37wbYUp7U6XiPH9cnzp2VOU1qDJbsTZPvi8nYRgfCfnWQcXNCUrbIQqbPpW41rn0biFnTCYuXyeQFDRoQt+dnZRjY1geUL6RF+lMS0wElNZzRaMivuO9UwVmaozL/nPSq2qvA8S2xrRS+ThtT2dTKA01KbZqDqwFKStYxgqoi1tZugvXzJNpPNzVeKlV1axgrmnDurMlaZyxqnr9A94OuLctkRkrlpd1VgkL0jSZ5I/OZflQLmfsG+f0VQZgjtXeQ3PvXGVW3slrTWrr33lwSFSSLg/rEQTLOGNzmADK9EqZAuel1sRQNZHCunl6XbbJKvuRxj0hR+j/oDk6qI1WgbhusT2GRXZIjJStd3VbwnpV1gND2VMnNmMx0tC/BIWnmYibOmD2y6yCLo=
+  - secure: FnLuynt/lzUrML/+6HymrjXEviQuN0b54XwS5+a6qnd50vCcc5gQbB/5ZZBvvDBb6pqu3M/nn9y15Hm07w57vVBojBPW97uN3uPzFd/7TfGouAPum0yQFX+i/AfIL8gulMcp5IDXHBBEPorhQ719s7rvztYuo0Q48p6WVZjm6aprdtxvFtqOtyXJ4fjfQsZKS999jRDpawN8x5yV0rb5ZgxsTmLcZMC4tt+5r/xl90ISptGvwihyQUKEqLt90SCb9wqZCZcnfrRNC2yfdLWYRvjQt9DPjg1ckq66mdqSsMZW2cKzzuOas1rfjSmmA8XtFdG9KJYfcTiUuXi5qm2k1VLhivQMWITp8YEF4HnMg5Fre5xLbmeOIGmXrerp0Sxd+RXPnXmP7wy5g/AfnRFslE4S6+r3rqYEhQDW3x3MHNSWEnbH7pagX5gjfclwz8DmqpTpBMbjDRxse3RrOhiN/6c7lfXUodNeobqrETFvEiOCgyxRcraljbDToT0Ft/NNjk/ZtO+ww5aYXNoPeqyKPu+P8WDikOLbJRH+4ce9uJ9vuMpn/rWkwxagLUhmZKhYWzJ+lG7ArG84JB5JsJf1g4iiIz2DMi6L780rAKJvYzlZxOlfIJA+PTCpP8XFSMYqnW/S/p2BGKkq/7bFvb8H62fQ+OPG7RyyL05mZDKLHzo=
+  - secure: THffcyTATxCglHjMWg9raOv2RxRr9ylVOiFOSsx3pXqVAUMkawq9D4PrRRDR6KJwzsf0FDRIRRZ30nUFX4OVpY25vuOYZMlqu68ZRUi8xajBe5Ire9R3ttqqS5n1XHVydt9YbUj5CaKCfFVnbjsriU8vvvwW91TLCNkHuoGjI+bnW3AuyACUyxoNweAna250tDJXWWoNmOXXNJi7G7K6UrvOCYHiv5S2dew3MUeIMRS72dWdd92fTeDWqLA/IpbRsG5tlgCF2lw/CWt+uBpjJNY4NBYYtw17dc5AuFRQoVOuicLVPlgNjiLBm0s7av6SDSewtJ7lH7w/Ilv49gS3zj2YTFtj5bynDsNKm+jQISuC+n5RcroGq5IJ32p+Bkrt1Qzq9NqQmP8RorFupNCq7MOaV9ZMHK1wsYllSmwCl8u3PNpDBIZOFpBVmgIyRGAXXmBpZGM3jhtCsBc1ao4r8ngqYID0sPL/scIjdm+/uILdkjnSYBi9C3sV7vZ2g6KWww6Rb86fvH4/eIMv6/cSas/Ni0CsTO6TJILiaXF1YzdVtfxA6+N5jGD10XorFNL0rv6YwLGTRLPaRehInapgGCMrn/aW5hPScTR3KnXewfIAx9CuFczXRdRLtgj8XpggJmhYAF6wHKQ1NFwy/RgomepenAfIYNy76I/g9hawyCU=
+android:
+  components:
+  - tools
+  - tools
+  - platform-tools
+  - android-${ANDROID_API}
+  - build-tools-${ANDROID_BUILD_TOOLS}
+  - extra
+script:
+- "./gradlew clean test build"
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_f68443254156_key -iv $encrypted_f68443254156_iv -in keystore.jks.enc -out keystore.jks -d
+- cd app/build/outputs/apk/release
+- jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ${TRAVIS_BUILD_DIR}/keystore.jks
+  -storepass $storepass -keypass $keypass app-release-unsigned.apk key0
+- jarsigner -verify app-release-unsigned.apk
+- "${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -v 4 app-release-unsigned.apk
+  TravisAndroid.apk"
+- cd -
+- scripts/tag.sh
+deploy:
+  provider: releases
+  on:
+    branch: master
+  api_key:
+    secure: khpu6qNN67Jrky4fXZkh4Y9o/pFTBwZQhaElZmkUyUuw4oX8jJ9GVFiPvbIBUf5IIRJ9DdPhr5mPZNkH93FskPU7LxxY+UiQ7xqxtOKP4zwqhCbikVwpuJ1W3hLG37a5SG6w19381L673mjeUzLskQTrzNMtiu5S1CFjXJxpqyer8Fh1vVzb1tqyFPsDvKwYaXrooVzxB6b0DdDTJk+O4SOoCitZTpQ+JtI0qdj3DXOOzm9CjoPq/3UhaQQZO54iU3kCfoLJVrIoaQB8fwkzMSdV0Qm45SFYUqIY36t5jruaRaKsvVqVcWzU3QGoZOEVH4Nowvu/C8o1iQiKmLLWgBdg9tNHtqzuw27bKUnxnpkQM1qUZXKdFwqep4H4VJEWFGc3IOyggWFMCabzIe6MmrUpU+nAIK2R3Un8z8HfdrkYkiq8B04nbprdgABjfpx2PYeS8WFVKJoL0rZuIxU5ebnb/LhxESaiUumsjm5WFJMZUZMCAU1Kq/i4uhbc30adccXpIs4v3K0BlMVVQU2C5vBm55ueBg5e8RK28klUz1mGxEzjm2ArMSfYSbex1GxyEaaOz2jCnnyxZTUyXxXc8n4YINZ70CwlgTcRcjJGzEJLnNA+7IsuUeQYL8TEbE6ql6cKx1skTDZxZcMiCbM9jq6NGv22VcnjxtJKaDPPfG4=
+  file: app/build/outputs/apk/release/TravisAndroid.apk
+  overwrite: true
+skip_cleanup: true
+dd:
+  secure: vdwxT4ONduwpUBJfFDPhKjZaxvyoAxbAYz4Wj1lr2uOc/kSurjGb9pbcfJ3aZV4/N1SHC5qPNO1Lmg8E/rWTfyHX9802psWiosm5UQE6m7emd/yUl2IPpykb5kq2ABU7COwamFsBFwC48FPtC/8n1fxqbX52JQwzDZrW36sZa/riKvhfz1W5m6bAmoVXkTrrDTtXOUtWWCitUAXz1yewb2zSZD/czmaf2ouPjeGXNeQcLzLaDCjP1tsfZtZjdcxPQiJmG182RSdqF1/safKdJzIzZE9ip01JSJkugrkn8d7qft/qj2Q+HaCwpQgQgPv34hjgJO+7ONmIR+zaJ+z2QkeyPvgRak2nnSa5tNFZDWDWYtsqbrwjblMV0gqluzgij6HsbSHdMyHhyRbpqy+hpt3AsY6uvx+SWAg9YPNwfu4wieRAVjjRMnPBlrjrtxP540J4GtqW2QU5HsU2hjFHMcd8P8WqVEi7cpG/y0Ihkily+yrZqowhoB5kE7TdRQKsUwfL3GYUmOuIX6sI9+/biXBEoCWLzbJjVtFHJNJz8mUNyJDGVo7Gtelnm6GqWbUY1uRu49VH63rCx0JYpm5KW6Bx4qsq0ASlfOsaDXqlvONjvK9Vo8r0hgMPCMqPfDl3CJ1eSYhsjf5eab0qNrDnb/BvH2UlbPpCX6Lh27Cwexk=
+before_install:
+- openssl aes-256-cbc -K $encrypted_f68443254156_key -iv $encrypted_f68443254156_iv
+  -in keystore.jks.enc -out keystore.jks -d
