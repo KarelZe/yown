@@ -31,6 +31,7 @@ before_install:
 - yes | sdkmanager "platforms;android-26"
 before_script:
 - chmod +x gradlew
+- chmod +x scripts/tag.sh
 script:
 - "./gradlew clean test build"
 before_deploy:
