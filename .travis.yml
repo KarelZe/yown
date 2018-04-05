@@ -49,5 +49,4 @@ skip_cleanup: true
 dd:
   secure: vdwxT4ONduwpUBJfFDPhKjZaxvyoAxbAYz4Wj1lr2uOc/kSurjGb9pbcfJ3aZV4/N1SHC5qPNO1Lmg8E/rWTfyHX9802psWiosm5UQE6m7emd/yUl2IPpykb5kq2ABU7COwamFsBFwC48FPtC/8n1fxqbX52JQwzDZrW36sZa/riKvhfz1W5m6bAmoVXkTrrDTtXOUtWWCitUAXz1yewb2zSZD/czmaf2ouPjeGXNeQcLzLaDCjP1tsfZtZjdcxPQiJmG182RSdqF1/safKdJzIzZE9ip01JSJkugrkn8d7qft/qj2Q+HaCwpQgQgPv34hjgJO+7ONmIR+zaJ+z2QkeyPvgRak2nnSa5tNFZDWDWYtsqbrwjblMV0gqluzgij6HsbSHdMyHhyRbpqy+hpt3AsY6uvx+SWAg9YPNwfu4wieRAVjjRMnPBlrjrtxP540J4GtqW2QU5HsU2hjFHMcd8P8WqVEi7cpG/y0Ihkily+yrZqowhoB5kE7TdRQKsUwfL3GYUmOuIX6sI9+/biXBEoCWLzbJjVtFHJNJz8mUNyJDGVo7Gtelnm6GqWbUY1uRu49VH63rCx0JYpm5KW6Bx4qsq0ASlfOsaDXqlvONjvK9Vo8r0hgMPCMqPfDl3CJ1eSYhsjf5eab0qNrDnb/BvH2UlbPpCX6Lh27Cwexk=
 before_install:
-- openssl aes-256-cbc -K $encrypted_f68443254156_key -iv $encrypted_f68443254156_iv
-  -in keystore.jks.enc -out keystore.jks -d
+- openssl aes-256-cbc -K $encrypted_f68443254156_key -iv $encrypted_f68443254156_iv -in keystore.jks.enc -out keystore.jks -d
