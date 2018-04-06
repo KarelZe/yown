@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Tag last commit as 'latest'.
 
 if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
