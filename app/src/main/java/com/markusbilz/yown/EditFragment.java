@@ -21,7 +21,7 @@ import com.lucasurbas.listitemview.ListItemView;
 
 import java.util.UUID;
 
-public class EditFragment extends Fragment implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener {
+public class EditFragment extends Fragment implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener, AddCategoriesDialog.AddDetailsDialogListener {
     private static final int RESULT_OK = -1;
     private static final int REQUEST_SET_IMAGE = 12;
     private AppCompatActivity activity;
@@ -109,7 +109,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                 openDialog(getString(R.string.title_lv_edit_title), getString(R.string.title_lv_edit_title), view.getId());
                 break;
             case R.id.lv_edit_category:
-                openDialog(getString(R.string.title_lv_edit_category), getString(R.string.title_lv_edit_category), view.getId());
+                openCategoryDialog(getString(R.string.title_lv_edit_category), view.getId());
                 break;
             case R.id.lv_edit_image:
                 if (cameraIntent.resolveActivity(activity.getPackageManager()) != null) {
@@ -141,9 +141,26 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
     }
 
     /**
+     * Open dialog to choose proper category
+     *
+     * @param title title in actionbar
+     * @param id    id of calling ui element
+     */
+    private void openCategoryDialog(String title, int id) {
+        AddCategoriesDialog dialog = new AddCategoriesDialog();
+        dialog.setTargetFragment(this, 1);
+        dialog.show(getChildFragmentManager(), "AddDetails");
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        bundle.putInt("id", id);
+        dialog.setArguments(bundle);
+    }
+
+    /**
      * Callback to receive data from dialog.
+     *
      * @param details data being edited
-     * @param id id of calling ui element
+     * @param id      id of calling ui element
      */
     @Override
     public void getDetails(String details, int id) {

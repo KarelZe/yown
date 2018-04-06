@@ -24,4 +24,8 @@
     <string name="title_debugging">Enable debugging</string>
     <string name="title_reset_all">Reset all data</string>
     <string name="title_how_to">How To</string>
+    <string name="category_1">university</string>
+    <string name="category_0">home</string>
+    <string name="category_2">work</string>
+    <string name="category_3">misc</string>
 </resources>
