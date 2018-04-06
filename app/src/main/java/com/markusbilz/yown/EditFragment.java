@@ -101,6 +101,30 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         return false;
     }
 
+    /* function saves the state of the thumbnail to bundle to preserve it when rotating the phone.
+    It is generally called when an activity might get killed.
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putByteArray("thumbnail", BitmapUtility.bitmapToByte(thumbnail));
+    }
+
+    /* restore thumbnail from bundle to preserve it when rotating the phone. On activity is
+    the fragments version of onRestoreInstanceState()
+    */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore last state for checked position.
+            byte[] bitmap = savedInstanceState.getByteArray("thumbnail");
+            if (bitmap != null) {
+                thumbnail = BitmapUtility.byteToBitmap(bitmap);
+                editImage.getAvatarView().setImageBitmap(thumbnail);
+            }
+        }
+    }
 
     @Override
     public void onClick(View view) {
