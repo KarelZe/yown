@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/list"
+        android:id="@+id/item_list"
         android:icon="@drawable/ic_assignment_black_24dp"
         android:title="@string/menu_item_list" />
     <item
-        android:id="@+id/dispose"
+        android:id="@+id/item_dispose"
         android:icon="@drawable/ic_light_bulb_outline_black_24dp"
         android:title="@string/menu_item_dispose" />
 </menu>

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set first item as default selection and replace fragment
         BottomNavigationView bottomNavigationView = findViewById(R.id.bnv_navigator);
-        bottomNavigationView.setSelectedItemId(R.id.list);
+        bottomNavigationView.setSelectedItemId(R.id.item_list);
         MenuItem selectedItem = bottomNavigationView.getMenu().getItem(0);
         switchFragment(selectedItem);
 
@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.itemSettings:
+            case R.id.item_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
-            case R.id.itemHowTo:
+            case R.id.item_how_to:
                 Intent howToIntent = new Intent(this, HowToActivity.class);
                 startActivity(howToIntent);
                 break;
@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch (menuItem.getItemId()) {
-            case R.id.list:
+            case R.id.item_list:
                 fragmentTransaction.replace(R.id.fl_content, new ListFragment()).commit();
                 break;
-            case R.id.dispose:
+            case R.id.item_dispose:
                 fragmentTransaction.replace(R.id.fl_content, new DisposeFragment()).commit();
                 break;
         }

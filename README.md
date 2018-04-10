@@ -23,6 +23,6 @@ You can find my latest build [in the releases tab.](https://github.com/KarelZe/y
 - [x] Enhance Settings Activity with debug console
 - [x] Enhance Settings Activity with reset all functionality
 - [x] Use Travis and GitHub releases for automated deploying
-- [ ] Code review
+- [x] Code review
 ## Contact
 Feel free to send me a  [mail](mailto:1705042@abertay.ac.uk)
