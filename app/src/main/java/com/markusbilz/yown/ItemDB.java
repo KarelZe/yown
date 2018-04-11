@@ -194,7 +194,7 @@ class ItemDB {
     }
 
     /**
-     * Function that generates SQL selection clauses based on chosen Filter
+     * Function that generates SQL selection clauses based on chosen filter
      *
      * @param filter Filter condition
      * @return SQL selection clause as string

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class KeepListFragment extends Fragment {
 
 
-    private RecyclerView recyclerView;
+    private RecyclerView rvKeep;
 
 
     @Override
@@ -26,9 +26,9 @@ public class KeepListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_keep_list, container, false);
 
-        recyclerView = view.findViewById(R.id.rv_keep);
+        rvKeep = view.findViewById(R.id.rv_keep);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        rvKeep.setLayoutManager(layoutManager);
         UpdateListTask updateListTask = new UpdateListTask();
         updateListTask.execute();
         return view;
@@ -54,7 +54,7 @@ public class KeepListFragment extends Fragment {
         protected void onPostExecute(ArrayList<Item> items) {
             super.onPostExecute(items);
             ItemAdapter adapter = ItemAdapter.getInstance(items);
-            recyclerView.setAdapter(adapter);
+            rvKeep.setAdapter(adapter);
         }
     }
 }

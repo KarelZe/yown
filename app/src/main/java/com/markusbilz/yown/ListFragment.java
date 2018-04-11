@@ -19,7 +19,7 @@ public class ListFragment extends Fragment {
 
     private static final int RESULT_OK = 200;
     private static final int REQUEST_ADD_ITEM = 1;
-    private RecyclerView recyclerView;
+    private RecyclerView rvList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -37,9 +37,9 @@ public class ListFragment extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.rv_list);
+        rvList = view.findViewById(R.id.rv_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        rvList.setLayoutManager(layoutManager);
         UpdateListTask updateListTask = new UpdateListTask();
         updateListTask.execute();
         return view;
@@ -76,7 +76,7 @@ public class ListFragment extends Fragment {
         protected void onPostExecute(ArrayList<Item> items) {
             super.onPostExecute(items);
             ItemWithCheckboxAdapter adapter = ItemWithCheckboxAdapter.getInstance(items);
-            recyclerView.setAdapter(adapter);
+            rvList.setAdapter(adapter);
         }
     }
 
