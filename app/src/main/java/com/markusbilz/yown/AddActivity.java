@@ -45,7 +45,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         // disable delete for add activity
-        MenuItem item = menu.findItem(R.id.action_menu_delete);
+        MenuItem item = menu.findItem(R.id.item_menu_delete);
         item.setVisible(false);
         return true;
     }
@@ -53,25 +53,23 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     // implementation happens in fragment
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_menu_nfc:
-                isWrite = !isWrite;
-                Toast.makeText(this, isWrite ? "Writing is enabled." : "Writing is disabled.", Toast.LENGTH_SHORT).show();
-                break;
+        if (item.getItemId() == R.id.item_menu_nfc) {
+            isWrite = !isWrite;
+            Toast.makeText(this, isWrite ? "Writing is enabled." : "Writing is disabled.", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
 
     /**
-     * Prepare menu for further usage in fragment. Disable Nfc Fragment, if device doesn't support
-     * NFC or if it disabled.
+     * Prepare menu for further usage in fragment. Disable Nfc, if device doesn't support
+     * NFC or if it is disabled.
      *
      * @param menu actionbar menu
      * @return boolean
      */
     @Override
     public boolean onPrepareOptionsMenu(@NonNull Menu menu) {
-        MenuItem itemNfc = menu.findItem(R.id.action_menu_nfc);
+        MenuItem itemNfc = menu.findItem(R.id.item_menu_nfc);
         if (!nfcIsEnabled()) {
             itemNfc.setVisible(false);
         }
@@ -93,7 +91,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
                 new Intent(this, AddActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                 0);
         IntentFilter[] filters = new IntentFilter[]{};
-        if (nfcAdapter != null && nfcAdapter.isEnabled()) {
+        if (nfcIsEnabled()) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
         } else {
             Toast.makeText(this, "NFC is disabled.", Toast.LENGTH_SHORT).show();
@@ -143,7 +141,8 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     }
 
     /**
-     * Function turns string into NdefMessage that contains plain text ndefRecord.
+     * Function turns string into NdefMessage that contains plain text ndefRecord and application
+     * record.
      *
      * @param string initial message for writing to ndef message
      * @return NdefMessage containing ndefRecord with string

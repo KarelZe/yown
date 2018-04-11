@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class DisposeListFragment extends Fragment {
 
 
-    private RecyclerView recyclerView;
+    private RecyclerView rvDispose;
 
 
     @Override
@@ -26,8 +26,8 @@ public class DisposeListFragment extends Fragment {
 
         // add layout manager and and adapter to recycler view
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView = view.findViewById(R.id.rv_dispose);
-        recyclerView.setLayoutManager(layoutManager);
+        rvDispose = view.findViewById(R.id.rv_dispose);
+        rvDispose.setLayoutManager(layoutManager);
         UpdateListTask updateListTask = new UpdateListTask();
         updateListTask.execute();
         return view;
@@ -53,7 +53,7 @@ public class DisposeListFragment extends Fragment {
         protected void onPostExecute(ArrayList<Item> items) {
             super.onPostExecute(items);
             ItemWithButtonAdapter adapter = ItemWithButtonAdapter.getInstance(items);
-            recyclerView.setAdapter(adapter);
+            rvDispose.setAdapter(adapter);
         }
     }
 

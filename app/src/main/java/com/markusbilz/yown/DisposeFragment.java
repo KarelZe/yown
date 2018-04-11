@@ -15,12 +15,12 @@ public class DisposeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dispose, container, false);
-        ViewPager viewPager = view.findViewById(R.id.vp_dispose);
-        TabLayout tabLayout = view.findViewById(R.id.tl_dispose);
+        ViewPager vpDispose = view.findViewById(R.id.vp_dispose);
+        TabLayout tlDispose = view.findViewById(R.id.tl_dispose);
 
         MultiFragmentPagerAdapter adapter = new MultiFragmentPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        vpDispose.setAdapter(adapter);
+        tlDispose.setupWithViewPager(vpDispose);
         return view;
     }
 

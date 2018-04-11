@@ -21,7 +21,7 @@ import com.lucasurbas.listitemview.ListItemView;
 
 import java.util.UUID;
 
-public class EditFragment extends Fragment implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener, AddCategoriesDialog.AddDetailsDialogListener {
+public class EditFragment extends Fragment implements View.OnClickListener, AddDetailsDialog.AddDetailsDialogListener, AddCategoriesDialog.AddCategoriesDialogListener {
     private static final int RESULT_OK = -1;
     private static final int REQUEST_SET_IMAGE = 12;
     private AppCompatActivity activity;
@@ -90,13 +90,10 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_menu_done:
-                saveItem();
-                break;
-            case R.id.action_menu_delete:
-                deleteItem();
-                break;
+        if (item.getItemId() == R.id.item_menu_done) {
+            saveItem();
+        } else if (item.getItemId() == R.id.item_menu_delete) {
+            deleteItem();
         }
         return false;
     }
@@ -143,6 +140,8 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                 break;
             case R.id.lv_edit_description:
                 openDialog(getString(R.string.title_lv_edit_description), getString(R.string.title_lv_edit_description), view.getId());
+                break;
+            default:
                 break;
         }
     }
@@ -199,20 +198,18 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             case R.id.lv_edit_description:
                 editDescription.setTitle(details);
                 break;
+            default:
+                break;
         }
     }
 
     public void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
 
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_SET_IMAGE:
-                    Bundle extras = data.getExtras();
-                    if (extras != null) {
-                        thumbnail = (Bitmap) extras.get("data");
-                        editImage.getAvatarView().setImageBitmap(thumbnail);
-                    }
-                    break;
+        if (resultCode == RESULT_OK && requestCode == REQUEST_SET_IMAGE) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                thumbnail = (Bitmap) extras.get("data");
+                editImage.getAvatarView().setImageBitmap(thumbnail);
             }
         }
     }

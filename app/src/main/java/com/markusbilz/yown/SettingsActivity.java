@@ -61,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Function to save the state of the switch to Shared Preferences
+     * Function to save the state of the switches to Shared Preferences
      */
     private void saveSettings() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);

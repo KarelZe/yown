@@ -259,7 +259,7 @@ class ItemDB {
 
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+            // empty, needed for upgrading the database
         }
     }
 }

@@ -45,7 +45,7 @@ public class AddDetailsDialog extends DialogFragment {
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        // currently not needed
                     }
                 })
                 .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
@@ -70,8 +70,8 @@ public class AddDetailsDialog extends DialogFragment {
         super.onAttach(context);
         try {
             listener = (AddDetailsDialogListener) getTargetFragment();
-        } catch (Exception e) {
-            throw new ClassCastException();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement AddDetailsDialogListener");
         }
     }
 

@@ -97,13 +97,12 @@ public class MainActivity extends AppCompatActivity {
     private void switchFragment(@NonNull MenuItem menuItem) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        switch (menuItem.getItemId()) {
-            case R.id.item_list:
-                fragmentTransaction.replace(R.id.fl_content, new ListFragment()).commit();
-                break;
-            case R.id.item_dispose:
-                fragmentTransaction.replace(R.id.fl_content, new DisposeFragment()).commit();
-                break;
+        if (menuItem.getItemId() == R.id.item_list) {
+            fragmentTransaction.replace(R.id.fl_content, new ListFragment()).commit();
+
+        } else if (menuItem.getItemId() == R.id.item_dispose) {
+            fragmentTransaction.replace(R.id.fl_content, new DisposeFragment()).commit();
+
         }
     }
 

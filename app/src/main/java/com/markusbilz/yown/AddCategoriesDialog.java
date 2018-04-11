@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 
 public class AddCategoriesDialog extends DialogFragment {
 
-    private AddDetailsDialogListener listener;
+    private AddCategoriesDialogListener listener;
     @Nullable
     private String title;
     private int id;
@@ -49,16 +49,16 @@ public class AddCategoriesDialog extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            listener = (AddDetailsDialogListener) getTargetFragment();
-        } catch (Exception e) {
-            throw new ClassCastException();
+            listener = (AddCategoriesDialogListener) getTargetFragment();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement AddCategoriesDialogListener");
         }
     }
 
     /**
      * Make use of observer pattern to pass data between Activity and dialog.
      */
-    public interface AddDetailsDialogListener {
+    public interface AddCategoriesDialogListener {
         void getDetails(String details, int id);
     }
 }

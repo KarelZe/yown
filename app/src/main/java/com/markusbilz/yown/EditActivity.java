@@ -23,7 +23,7 @@ public class EditActivity extends AppCompatActivity implements EditFragment.OnUu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit, menu);
-        MenuItem item = menu.findItem(R.id.action_menu_nfc);
+        MenuItem item = menu.findItem(R.id.item_menu_nfc);
         item.setVisible(false);
         return true;
     }
@@ -41,6 +41,6 @@ public class EditActivity extends AppCompatActivity implements EditFragment.OnUu
      */
     @Override
     public void onUuidSet(String uuid) {
-
+        // pass uuid to fragment
     }
 }

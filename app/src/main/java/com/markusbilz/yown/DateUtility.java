@@ -56,7 +56,7 @@ class DateUtility {
         } else if (timeDelta <= msOfCurrentDay + 86_400_000) {
             return "yesterday at " + time;
         } else {
-            return (timeDelta / 86400000) + " days ago";
+            return (timeDelta / 86_400_000) + " days ago";
         }
     }
 }
