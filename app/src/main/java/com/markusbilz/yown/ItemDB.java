@@ -142,8 +142,9 @@ class ItemDB {
      * Function to update date of last usage for database entry.
      *
      * @param uuid Uuid that is e. g. stored on nfc tags.
+     * @return amount Number of items updated e.g 0 or 1
      */
-    void update(String uuid) {
+    int update(String uuid) {
         ItemDbHelper helper = new ItemDbHelper(context);
         try (SQLiteDatabase db = helper.getWritableDatabase()) {
             String date = DateUtility.nowSql();
@@ -151,7 +152,7 @@ class ItemDB {
             values.put(ItemEntry.COLNAME_DATE_OF_LAST_USAGE, date);
             String selection = ItemEntry.COLNAME_UUID_NFC + " LIKE ?";
             String[] selectionArgs = {uuid};
-            db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+            return db.update(ItemEntry.TABLE_NAME, values, selection, selectionArgs);
         }
     }
 

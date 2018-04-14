@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                 0);
         filters = new IntentFilter[]{};
+
+        /* consume intent, if activity is initially created. Intents recieved, when app is paused
+         are handled in onReceive() through ForegroundDispatch*/
+        onNewIntent(getIntent());
     }
 
 
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             ndef.close();
             UpdateItemTask updateItemTask = new UpdateItemTask();
             updateItemTask.execute();
-            Toast.makeText(this, "updated item", Toast.LENGTH_SHORT).show();
+
         } catch (@NonNull IOException | FormatException e) {
             e.printStackTrace();
         }
@@ -210,17 +214,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class UpdateItemTask extends AsyncTask<Void, Void, Void> {
+    private class UpdateItemTask extends AsyncTask<Void, Void, Integer> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            ItemDB.getInstance(getApplicationContext()).update(uuid);
-            return null;
+        protected Integer doInBackground(Void... voids) {
+            return ItemDB.getInstance(getApplicationContext()).update(uuid);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(Integer amount) {
+            super.onPostExecute(amount);
+            Toast.makeText(getApplicationContext(), amount == 1 ? "updated " + amount + " item" :
+                    "updated " + amount + " items", Toast.LENGTH_SHORT).show();
         }
     }
 }
