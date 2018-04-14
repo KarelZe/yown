@@ -115,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
         if (nfcAdapter != null) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
         }
+        // show toast if nfc is disabled
+        if (nfcAdapter != null && !nfcAdapter.isEnabled()) {
+            Toast.makeText(this, "NFC is disabled.", Toast.LENGTH_SHORT).show();
+        }
         // Add in-app console
         SharedPreferences sharedPreferences = this.getSharedPreferences(SettingsActivity.SHARED_PREFERENCES, MODE_PRIVATE);
         boolean enableDebug = sharedPreferences.getBoolean(SettingsActivity.ENABLE_DEBUGGING, false);
