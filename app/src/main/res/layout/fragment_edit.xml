@@ -17,7 +17,7 @@
     <com.lucasurbas.listitemview.ListItemView
         android:id="@+id/lv_edit_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:liv_displayMode="avatar"
         app:liv_subtitle="@string/subtitle_lv_add_image"
         app:liv_title="@string/title_lv_edit_image" />

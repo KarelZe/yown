@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.lucasurbas.listitemview.ListItemView;
 
@@ -209,6 +210,9 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             Bundle extras = data.getExtras();
             if (extras != null) {
                 thumbnail = (Bitmap) extras.get("data");
+                // set image and crop to quad
+                editImage.getAvatarView().setAdjustViewBounds(true);
+                editImage.getAvatarView().setScaleType(ImageView.ScaleType.CENTER_CROP);
                 editImage.getAvatarView().setImageBitmap(thumbnail);
             }
         }
@@ -302,7 +306,10 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                 editTitle.setTitle(item.getTitle());
                 editCategory.setTitle(item.getCategory());
                 editDescription.setTitle(item.getDescription());
+                // set image and crop to quad
                 editImage.getAvatarView().setImageBitmap(BitmapUtility.byteToBitmap(item.getThumbnail()));
+                editImage.getAvatarView().setAdjustViewBounds(true);
+                editImage.getAvatarView().setScaleType(ImageView.ScaleType.CENTER_CROP);
                 subtitle = DateUtility.dateTimeUi(item.getDateOfLastUsage());
             }
             if (actionBar != null) {
