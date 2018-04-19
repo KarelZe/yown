@@ -119,7 +119,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             byte[] bitmap = savedInstanceState.getByteArray("thumbnail");
             if (bitmap != null) {
                 thumbnail = BitmapUtility.byteToBitmap(bitmap);
-                editImage.getAvatarView().setImageBitmap(thumbnail);
+                setImage();
             }
         }
     }
@@ -211,11 +211,18 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             if (extras != null) {
                 thumbnail = (Bitmap) extras.get("data");
                 // set image and crop to quad
-                editImage.getAvatarView().setAdjustViewBounds(true);
-                editImage.getAvatarView().setScaleType(ImageView.ScaleType.CENTER_CROP);
-                editImage.getAvatarView().setImageBitmap(thumbnail);
+                setImage();
             }
         }
+    }
+
+    /**
+     * function to set thumbnail as cropped quad
+     */
+    private void setImage() {
+        editImage.getAvatarView().setAdjustViewBounds(true);
+        editImage.getAvatarView().setScaleType(ImageView.ScaleType.CENTER_CROP);
+        editImage.getAvatarView().setImageBitmap(thumbnail);
     }
 
     private void saveItem() {
@@ -307,9 +314,8 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                 editCategory.setTitle(item.getCategory());
                 editDescription.setTitle(item.getDescription());
                 // set image and crop to quad
-                editImage.getAvatarView().setImageBitmap(BitmapUtility.byteToBitmap(item.getThumbnail()));
-                editImage.getAvatarView().setAdjustViewBounds(true);
-                editImage.getAvatarView().setScaleType(ImageView.ScaleType.CENTER_CROP);
+                thumbnail = BitmapUtility.byteToBitmap(item.getThumbnail());
+                setImage();
                 subtitle = DateUtility.dateTimeUi(item.getDateOfLastUsage());
             }
             if (actionBar != null) {
