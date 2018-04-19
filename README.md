@@ -24,5 +24,9 @@ You can find my latest build [in the releases tab.](https://github.com/KarelZe/y
 - [x] Enhance Settings Activity with reset all functionality
 - [x] Use Travis and GitHub releases for automated deploying
 - [x] Code review
+
+## Tutorial
+You can find a short tutorial within the app or [here.](https://github.com/KarelZe/yown/blob/master/app/src/main/assets/index.html)
+
 ## Contact
 Feel free to send me a  [mail](mailto:1705042@abertay.ac.uk)
