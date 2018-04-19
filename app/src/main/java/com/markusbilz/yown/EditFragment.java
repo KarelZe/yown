@@ -106,6 +106,9 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putByteArray("thumbnail", BitmapUtility.bitmapToByte(thumbnail));
+        outState.putString("title", editTitle.getTitle());
+        outState.putString("description", editDescription.getTitle());
+        outState.putString("category", editCategory.getTitle());
     }
 
     /* restore thumbnail from bundle to preserve it when rotating the phone. On activity is
@@ -149,36 +152,54 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
 
     /**
      * Open dialog to edit fields e. g. title, description
+     * Using FragmentManager to check if (dynamic) DialogFragment is still in memory, otherwise
+     * creates a new dialog. This prevents crashes when rotating the app with open dialogs.
+     * Implementation according to:
+     * https://medium.com/@android2ee/dialogfragment-coding-rules-93837b9c918
      *
      * @param title title in actionbar
      * @param hint  hint in EditText field
      * @param id    id of calling ui element
      */
     private void openDialog(String title, String hint, int id) {
-        AddDetailsDialog dialog = new AddDetailsDialog();
-        dialog.setTargetFragment(this, 1);
-        dialog.show(getChildFragmentManager(), "AddDetails");
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("hint", hint);
-        bundle.putInt("id", id);
-        dialog.setArguments(bundle);
+        AddDetailsDialog dialog = (AddDetailsDialog) getFragmentManager().findFragmentByTag("detailsDialog");
+        if (dialog == null) {
+            dialog = new AddDetailsDialog();
+            dialog.setTargetFragment(this, 1);
+            Bundle bundle = new Bundle();
+            bundle.putString("title", title);
+            bundle.putString("hint", hint);
+            bundle.putInt("id", id);
+            dialog.setArguments(bundle);
+            getFragmentManager().beginTransaction().add(dialog, "detailsDialog").commit();
+        } else {
+            getFragmentManager().beginTransaction().show(dialog).commit();
+        }
     }
 
     /**
-     * Open dialog to choose proper category
+     * Open dialog to choose proper category. Using FragmentManager to check if (dynamic) DialogFragment
+     * is still in memory, otherwise creates a new dialog. This prevents crashes when rotating the app
+     * with open dialogs. Implementation according to:
+     * https://medium.com/@android2ee/dialogfragment-coding-rules-93837b9c918
      *
      * @param title title in actionbar
      * @param id    id of calling ui element
      */
     private void openCategoryDialog(String title, int id) {
-        AddCategoriesDialog dialog = new AddCategoriesDialog();
-        dialog.setTargetFragment(this, 1);
-        dialog.show(getChildFragmentManager(), "AddDetails");
-        Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putInt("id", id);
-        dialog.setArguments(bundle);
+        AddCategoriesDialog dialog = (AddCategoriesDialog) getFragmentManager().findFragmentByTag("categoriesDialog");
+        if (dialog == null) {
+            dialog = new AddCategoriesDialog();
+            dialog.setTargetFragment(this, 1);
+            Bundle bundle = new Bundle();
+            bundle.putString("title", title);
+            bundle.putInt("id", id);
+            dialog.setArguments(bundle);
+            getFragmentManager().beginTransaction().add(dialog, "categoriesDialog").commit();
+        } else {
+            getFragmentManager().beginTransaction().show(dialog).commit();
+        }
+
     }
 
     /**

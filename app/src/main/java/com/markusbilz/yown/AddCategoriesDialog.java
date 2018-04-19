@@ -16,6 +16,7 @@ public class AddCategoriesDialog extends DialogFragment {
     private String title;
     private int id;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
