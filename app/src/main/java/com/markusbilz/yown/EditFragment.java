@@ -62,9 +62,11 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         editDescription = view.findViewById(R.id.lv_edit_description);
 
         int id = getActivity().getIntent().getIntExtra("id", 0);
-        LoadItemTask loadItemTask = new LoadItemTask();
-        loadItemTask.execute(id);
-
+        // only load item if it hasn't been loaded yet
+        if (item == null) {
+            LoadItemTask loadItemTask = new LoadItemTask();
+            loadItemTask.execute(id);
+        }
         uuid = UUID.randomUUID().toString();
         onUuidListener.onUuidSet(uuid);
         editTitle.setOnClickListener(this);
@@ -79,6 +81,8 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         }
+        // keep title, description etc. after rotation
+        setRetainInstance(true);
         return view;
     }
 
@@ -99,26 +103,23 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         return false;
     }
 
+
     /* function saves the state of the thumbnail to bundle to preserve it when rotating the phone.
-    It is generally called when an activity might get killed.
-     */
+        It is generally called when an activity might get killed.
+         */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putByteArray("thumbnail", BitmapUtility.bitmapToByte(thumbnail));
-        outState.putString("title", editTitle.getTitle());
-        outState.putString("description", editDescription.getTitle());
-        outState.putString("category", editCategory.getTitle());
     }
 
     /* restore thumbnail from bundle to preserve it when rotating the phone. On activity is
-    the fragments version of onRestoreInstanceState()
-    */
+        the fragments version of onRestoreInstanceState()
+        */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            // Restore last state for checked position.
             byte[] bitmap = savedInstanceState.getByteArray("thumbnail");
             if (bitmap != null) {
                 thumbnail = BitmapUtility.byteToBitmap(bitmap);
