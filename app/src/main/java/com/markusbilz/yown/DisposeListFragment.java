@@ -22,9 +22,8 @@ public class DisposeListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // inflate layout using custom layout and add adapter to recycler view
         View view = inflater.inflate(R.layout.fragment_dispose_list, container, false);
-
-        // add layout manager and and adapter to recycler view
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rvDispose = view.findViewById(R.id.rv_dispose);
         rvDispose.setLayoutManager(layoutManager);

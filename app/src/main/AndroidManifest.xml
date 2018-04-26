@@ -45,7 +45,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".EditActivity"
-            android:parentActivityName=".EditActivity" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity" />

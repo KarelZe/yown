@@ -20,10 +20,14 @@ public class AddCategoriesDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title = getArguments().getString("title");
-        id = getArguments().getInt("id");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            title = bundle.getString("title");
+            id = bundle.getInt("id");
+        }
     }
 
+    // implementation adapted from https://youtu.be/Bsm-BlXo2SI
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

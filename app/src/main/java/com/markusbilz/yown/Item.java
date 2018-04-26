@@ -15,6 +15,7 @@ class Item {
     private String dateOfLastUsage;
     private String category;
 
+
     /**
      * @param id              primary key of item in database
      * @param thumbnail       thumbnail image of item

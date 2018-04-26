@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 class BitmapUtility {
     /**
      * Function converts image to byte array without compressing the image.
+     * Implementation adopted from https://stackoverflow.com/a/36920229
      *
      * @param bitmap Bitmap or null reference
      * @return Byte array with image data or empty Byte Array.
@@ -27,6 +28,7 @@ class BitmapUtility {
 
     /**
      * Function converts byte array to Bitmap file.
+     * Implementation adopted from https://stackoverflow.com/a/36920229
      *
      * @param image Byte array for conversion.
      * @return Bitmap file

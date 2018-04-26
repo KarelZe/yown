@@ -1,3 +1,4 @@
+# implementation adapted from https://medium.com/@harmittaa/travis-ci-android-example-357f6e632fc4
 sudo: required
 language: android
 jdk: oraclejdk8

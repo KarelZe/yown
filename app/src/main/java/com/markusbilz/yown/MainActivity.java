@@ -205,16 +205,14 @@ public class MainActivity extends AppCompatActivity {
      * @return String representation of message
      */
     private String ndefMessageToString(@Nullable NdefMessage message) {
-        StringBuilder ret = new StringBuilder();
         if (message == null) {
-            return ret.toString();
+            return "";
         }
         // first record contains uuid, second records contains application record
         NdefRecord[] records = message.getRecords();
         NdefRecord record = records[0];
         byte[] payload = record.getPayload();
-        ret.append(new String(payload));
-        return ret.toString();
+        return new String(payload);
     }
 
     @SuppressLint("StaticFieldLeak")

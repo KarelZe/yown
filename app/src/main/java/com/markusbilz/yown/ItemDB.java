@@ -15,6 +15,7 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+// implementation adapted from CMP 309 slides by Andrei Boiko
 class ItemDB {
 
     static final int FILTER_KEEP = 1;
@@ -214,7 +215,7 @@ class ItemDB {
             } else
             // item has been used in the last 2 days on a rolling basis
             {
-                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ")<= 2";
+                return "julianday('now') - julianday(" + ItemEntry.COLNAME_DATE_OF_LAST_USAGE + ") <= 2";
             }
         } else {
             if (advancedSortingState)

@@ -13,7 +13,7 @@ class DateUtility {
     private final static SimpleDateFormat timeUi = new SimpleDateFormat("HH:mm", Locale.US);
 
     /**
-     * Function returns current date time as a string in date time format that is used with sqlite
+     * Function returns current date time as a string in date time format that is used with SQLite
      * data bases.
      *
      * @return String with current date time
@@ -28,7 +28,7 @@ class DateUtility {
      * the parameter can not be converted, the original string is being returned.
      *
      * @param dateTime time string for conversion
-     * @return String with time delta.
+     * @return String with human readable time.
      */
     static String dateTimeUi(String dateTime) {
         Date today = new Date();

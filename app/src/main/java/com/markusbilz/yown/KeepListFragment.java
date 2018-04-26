@@ -23,7 +23,7 @@ public class KeepListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment with custom layout
         View view = inflater.inflate(R.layout.fragment_keep_list, container, false);
 
         rvKeep = view.findViewById(R.id.rv_keep);

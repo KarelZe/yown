@@ -23,14 +23,19 @@ public class AddDetailsDialog extends DialogFragment {
     private String hint;
     private int id;
 
+    // get title, hint and id from bundle before view is created
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title = getArguments().getString("title");
-        hint = getArguments().getString("hint");
-        id = getArguments().getInt("id");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            title = getArguments().getString("title");
+            hint = getArguments().getString("hint");
+            id = getArguments().getInt("id");
+        }
     }
 
+    // implementation adapted from https://youtu.be/Bsm-BlXo2SI
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

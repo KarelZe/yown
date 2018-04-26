@@ -29,10 +29,10 @@
         android:layout_above="@+id/bnv_navigator"
         android:background="@color/colorBlack"
         android:fontFamily="monospace"
+        android:gravity="bottom"
         android:maxLines="10"
         android:padding="5dp"
         android:scrollbars="vertical"
         android:textColor="@color/colorWhite"
-        android:gravity="bottom"
         android:visibility="invisible" />
 </RelativeLayout>

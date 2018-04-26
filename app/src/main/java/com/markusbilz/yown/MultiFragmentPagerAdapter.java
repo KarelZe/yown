@@ -12,6 +12,7 @@ class MultiFragmentPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+
     // This determines the fragment for each tab
     @NonNull
     @Override
