@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Read uuid from ndef message. Try to update usage using Update Item Task.
-     *
+     * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
+     * for reference.
      * @param ndef Content of Ndef tag
      */
     private void readFromNfc(@NonNull Ndef ndef) {
