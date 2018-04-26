@@ -93,7 +93,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
         IntentFilter[] filters = new IntentFilter[]{};
         if (nfcIsEnabled()) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
-        } else {
+        } else if (nfcAdapter != null) {
             Toast.makeText(this, "NFC is disabled.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -122,6 +122,7 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
      * Function to write NdefMessage to nfc tag
      * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
      * for reference.
+     *
      * @param ndef        Ndef to connect to
      * @param ndefMessage NdefMessage to be written to nfc tag
      */

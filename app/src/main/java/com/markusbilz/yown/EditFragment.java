@@ -1,7 +1,6 @@
 package com.markusbilz.yown;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -74,7 +74,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
         editImage.setOnClickListener(this);
         editCategory.setOnClickListener(this);
 
-        actionBar = getActivity().getActionBar();
+        actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_edit_item);
             actionBar.setSubtitle(subtitle);
