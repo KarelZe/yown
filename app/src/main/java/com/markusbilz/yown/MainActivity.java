@@ -218,28 +218,31 @@ public class MainActivity extends AppCompatActivity {
      * for reference and refactored it to use AsyncTasks.
      */
     @SuppressLint("StaticFieldLeak")
-    private class ReadNfcTask extends AsyncTask<Tag, Void, String> {
+    private class ReadNfcTask extends AsyncTask<Tag, Void, Boolean> {
         @Override
-        protected String doInBackground(Tag... tags) {
+        protected Boolean doInBackground(Tag... tags) {
             try {
                 Ndef ndef = Ndef.get(tags[0]);
                 ndef.connect();
                 NdefMessage ndefMessage = ndef.getNdefMessage();
                 uuid = ndefMessageToString(ndefMessage);
                 ndef.close();
-
+                return true;
             } catch (@NonNull IOException | FormatException e) {
                 e.printStackTrace();
+                return false;
             }
-            return uuid;
         }
 
         @Override
-        protected void onPostExecute(String uuid) {
+        protected void onPostExecute(Boolean successful) {
             // start update task from ui thread to run on another thread
-            UpdateItemTask updateItemTask = new UpdateItemTask();
-            updateItemTask.execute();
-            super.onPostExecute(uuid);
+            if (successful) {
+                UpdateItemTask updateItemTask = new UpdateItemTask();
+                updateItemTask.execute();
+            }
+            super.onPostExecute(successful);
+
         }
     }
 }

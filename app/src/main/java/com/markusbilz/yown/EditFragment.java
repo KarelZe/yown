@@ -67,8 +67,12 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             LoadItemTask loadItemTask = new LoadItemTask();
             loadItemTask.execute(id);
         }
-        uuid = UUID.randomUUID().toString();
+        // if uuid could not be loaded from saved instance, then create a new one
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+        }
         onUuidListener.onUuidSet(uuid);
+
         editTitle.setOnClickListener(this);
         editDescription.setOnClickListener(this);
         editImage.setOnClickListener(this);
@@ -124,6 +128,10 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
             if (bitmap != null) {
                 thumbnail = BitmapUtility.byteToBitmap(bitmap);
                 setImage();
+            }
+            String uuid = savedInstanceState.getString("uuid");
+            if (uuid != null) {
+                this.uuid = uuid;
             }
         }
     }

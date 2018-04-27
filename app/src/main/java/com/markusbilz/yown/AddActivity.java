@@ -133,6 +133,16 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
     }
 
     /**
+     * Callback to pass uuid between Fragment and Activity.
+     *
+     * @param uuid unique identifier to map item to nfc
+     */
+    @Override
+    public void onUuidSet(String uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
      * Task write to NdefMessage to nfc tag
      * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
      * for reference, refactored it to AsyncTask
@@ -166,15 +176,5 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
             Toast.makeText(AddActivity.this, successful ? "Writing tag was successful" : "Writing tag failed", Toast.LENGTH_SHORT).show();
             super.onPostExecute(successful);
         }
-    }
-
-    /**
-     * Callback to pass uuid between Fragment and Activity.
-     *
-     * @param uuid unique identifier to map item to nfc
-     */
-    @Override
-    public void onUuidSet(String uuid) {
-        this.uuid = uuid;
     }
 }
