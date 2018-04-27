@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null && NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             if (tag != null) {
-                Ndef ndef = Ndef.get(tag);
-                readFromNfc(ndef);
+                ReadNfcTask readNfcTask = new ReadNfcTask();
+                readNfcTask.execute(tag);
             }
         }
     }
@@ -173,27 +173,6 @@ public class MainActivity extends AppCompatActivity {
             tvDebug.setText(log.toString());
             tvDebug.setMovementMethod(ScrollingMovementMethod.getInstance());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Read uuid from ndef message. Try to update usage using Update Item Task.
-     * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
-     * for reference.
-     *
-     * @param ndef Content of Ndef tag
-     */
-    private void readFromNfc(@NonNull Ndef ndef) {
-        try {
-            ndef.connect();
-            NdefMessage ndefMessage = ndef.getNdefMessage();
-            uuid = ndefMessageToString(ndefMessage);
-            ndef.close();
-            UpdateItemTask updateItemTask = new UpdateItemTask();
-            updateItemTask.execute();
-
-        } catch (@NonNull IOException | FormatException e) {
             e.printStackTrace();
         }
     }
@@ -230,6 +209,37 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(amount);
             Toast.makeText(getApplicationContext(), amount == 1 ? "updated " + amount + " item" :
                     "updated " + amount + " items", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Read uuid from ndef tag. Try to update usage using Update Item Task.
+     * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
+     * for reference and refactored it to use AsyncTasks.
+     */
+    @SuppressLint("StaticFieldLeak")
+    private class ReadNfcTask extends AsyncTask<Tag, Void, String> {
+        @Override
+        protected String doInBackground(Tag... tags) {
+            try {
+                Ndef ndef = Ndef.get(tags[0]);
+                ndef.connect();
+                NdefMessage ndefMessage = ndef.getNdefMessage();
+                uuid = ndefMessageToString(ndefMessage);
+                ndef.close();
+
+            } catch (@NonNull IOException | FormatException e) {
+                e.printStackTrace();
+            }
+            return uuid;
+        }
+
+        @Override
+        protected void onPostExecute(String uuid) {
+            // start update task from ui thread to run on another thread
+            UpdateItemTask updateItemTask = new UpdateItemTask();
+            updateItemTask.execute();
+            super.onPostExecute(uuid);
         }
     }
 }

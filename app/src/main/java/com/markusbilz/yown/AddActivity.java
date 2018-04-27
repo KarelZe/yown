@@ -1,5 +1,6 @@
 package com.markusbilz.yown;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,9 +10,9 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,35 +112,10 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
         super.onNewIntent(intent);
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tag != null && isWrite) {
-            Ndef ndef = Ndef.get(tag);
-            NdefMessage ndefMessage = stringToNdefMessage(uuid);
-            writeToNfc(ndef, ndefMessage);
+            WriteNfcTask writeNfcTask = new WriteNfcTask();
+            writeNfcTask.execute(tag);
         }
 
-    }
-
-    /**
-     * Function to write NdefMessage to nfc tag
-     * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
-     * for reference.
-     *
-     * @param ndef        Ndef to connect to
-     * @param ndefMessage NdefMessage to be written to nfc tag
-     */
-    private void writeToNfc(@Nullable Ndef ndef, NdefMessage ndefMessage) {
-        if (ndef != null) {
-            try {
-                ndef.connect();
-                ndef.writeNdefMessage(ndefMessage);
-                ndef.close();
-                Toast.makeText(this, "Writing tag was successful.", Toast.LENGTH_SHORT).show();
-            } catch (@NonNull FormatException | IOException e) {
-                e.printStackTrace();
-            } finally {
-                isWrite = false;
-            }
-
-        }
     }
 
     /**
@@ -154,6 +130,42 @@ public class AddActivity extends AppCompatActivity implements EditFragment.OnUui
                 string.getBytes(Charset.forName("UTF-8"))),
                 NdefRecord.createApplicationRecord("com.markusbilz.yown")};
         return new NdefMessage(ndefRecords);
+    }
+
+    /**
+     * Task write to NdefMessage to nfc tag
+     * Used https://www.learn2crack.com/2016/10/android-reading-and-writing-nfc-tags.html
+     * for reference, refactored it to AsyncTask
+     */
+    @SuppressLint("StaticFieldLeak")
+    private class WriteNfcTask extends AsyncTask<Tag, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Tag... tags) {
+            Ndef ndef = Ndef.get(tags[0]);
+            NdefMessage ndefMessage = stringToNdefMessage(uuid);
+            if (ndef != null) {
+                try {
+                    ndef.connect();
+                    ndef.writeNdefMessage(ndefMessage);
+                    ndef.close();
+                    return true;
+                } catch (@NonNull FormatException | IOException e) {
+                    e.printStackTrace();
+                    return false;
+                } finally {
+                    isWrite = false;
+                }
+
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean successful) {
+            Toast.makeText(AddActivity.this, successful ? "Writing tag was successful" : "Writing tag failed", Toast.LENGTH_SHORT).show();
+            super.onPostExecute(successful);
+        }
     }
 
     /**
