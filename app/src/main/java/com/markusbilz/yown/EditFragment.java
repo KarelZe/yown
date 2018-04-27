@@ -347,6 +347,7 @@ public class EditFragment extends Fragment implements View.OnClickListener, AddD
                 thumbnail = BitmapUtility.byteToBitmap(item.getThumbnail());
                 setImage();
                 subtitle = DateUtility.dateTimeUi(item.getDateOfLastUsage());
+                uuid = item.getUuidNfc();
             }
             if (actionBar != null) {
                 actionBar.setSubtitle(subtitle);
